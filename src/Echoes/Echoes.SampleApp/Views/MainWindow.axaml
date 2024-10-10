@@ -1,0 +1,43 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Echoes.SampleApp.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:echoes="clr-namespace:Echoes;assembly=Echoes"
+        xmlns:echoes1="clr-namespace:Echoes;assembly=Echoes.SampleApp"
+        xmlns:echoes2="clr-namespace:Echoes;assembly=Echoes.SampleApp.Translations"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Echoes.SampleApp.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Echoes.SampleApp">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <DockPanel>
+        <UniformGrid DockPanel.Dock="Bottom" Columns="3" Rows="1">
+            <Button Command="{Binding SetCultureCommand}" CommandParameter="english">
+                English
+            </Button>
+            <Button Command="{Binding SetCultureCommand}" CommandParameter="german">
+                German
+            </Button>
+            <Button Command="{Binding SetCultureCommand}" CommandParameter="chinese">
+                Chinese
+            </Button>
+        </UniformGrid>
+
+        <ContentControl
+            DockPanel.Dock="Top"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center">
+            <TextBlock
+                FontSize="64"
+                Text="{echoes:Translate {x:Static echoes2:Strings.hello_world}}"/>
+        </ContentControl>
+    </DockPanel>
+</Window>
