@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="codename.webp" width="100"/>
+  <img src="/img/icon.webp" width="100"/>
   <h1 align="center">Echoes</h1>
   <p align="center">
     Simple type safe translations for Avalonia
