@@ -35,8 +35,22 @@ FeatureB_de.toml
 FeatureB_es.toml
 ```
 
+#### Example: Strings.toml
+```toml
+[echoes_config]
+generated_class_name = "Strings"
+generated_namespace = "Echoes.SampleApp.Translations"
 
+[translations]
+hello_world = 'Hello World'
+greeting = 'Hello {0}, how are you?'
+```
 
+#### Example: Strings_de.toml
+```toml
+hello_world = 'Hallo Welt'
+greeting = 'Hallo {0}, wie geht es dir?'
+```
 
 ### Why is it named "Echoes"?
 The library is named after the Pink Floyd song [Echoes](https://en.wikipedia.org/wiki/Echoes_(Pink_Floyd_song)).
