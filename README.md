@@ -35,6 +35,7 @@ FeatureB_de.toml
 FeatureB_es.toml
 ```
 
+### File Format
 #### Example: Strings.toml
 ```toml
 [echoes_config]
