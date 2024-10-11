@@ -8,9 +8,22 @@
 
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <IsRoslynComponent>true</IsRoslynComponent>
-
         <RootNamespace>Echoes.Generator</RootNamespace>
+
+        <!-- nuget package info -->
+        <Version>$(EchoesVersion)</Version>
+        <PackageVersion>$(EchoesVersion)</PackageVersion>
+        <Authors>Voyonic Systems GmbH</Authors>
+        <Product>Echoes.Generator</Product>
+        <Title>Echoes.Generator</Title>
         <PackageId>Echoes.Generator</PackageId>
+        <Description>Simple type safe translations for Avalonia</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/Voyonic-Systems/Echoes</PackageProjectUrl>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     </PropertyGroup>
 
     <ItemGroup>

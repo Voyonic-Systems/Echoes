@@ -1,8 +1,6 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Echoes.SampleApp.ViewModels;
-using Echoes.SampleApp.Views;
 
 namespace Echoes.SampleApp;
 

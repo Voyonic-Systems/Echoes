@@ -3,3 +3,4 @@ generated_class_name = "Strings"
 
 [translations]
 hello_world = 'Hello World'
+greeting = 'Hello {0}, how are you?'
