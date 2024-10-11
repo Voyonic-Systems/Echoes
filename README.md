@@ -24,6 +24,12 @@ Specify translations files (Embedded Resources, Source Generator)
 </ItemGroup>
 ```
 
+> [!CAUTION] 
+> You currently have to place your translation (.toml) files and the generated code in a **separate project**. This is because Avalonia also generates
+> code using their XAML compiler. In order for the xaml compiler to see your translations you need to put them in a different project. Otherwise you'll get a
+> compiler error.
+
+
 ### Translation Files
 Translations are loaded from `.toml` files. The invariant file is **special** as it's structure included configuration data. 
 Language files are identified by `_{lang}.toml` postfix. 
