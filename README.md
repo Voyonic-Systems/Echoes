@@ -6,6 +6,5 @@
   </p>
 </p>
 
-
-
-Named after the Pink Floyd song [Echoes](https://en.wikipedia.org/wiki/Echoes_(Pink_Floyd_song)).
+### Why is it named "Echoes"?
+The library is named after the Pink Floyd song [Echoes](https://en.wikipedia.org/wiki/Echoes_(Pink_Floyd_song)).
