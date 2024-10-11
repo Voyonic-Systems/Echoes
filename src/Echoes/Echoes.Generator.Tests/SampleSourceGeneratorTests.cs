@@ -6,18 +6,24 @@ using Xunit;
 
 namespace Echoes.Generator.Tests;
 
-public class SampleSourceGeneratorTests
+public class GeneratorTests
 {
     private const string TranslationFileText =
-@"#!echoes
+@"
+[echoes_config]
+generated_namespace = ""Echoes.SampleApp.Translations""
+generated_class_name = ""Strings""
+
+[translations]
 hello_world = 'Hello World'
+greeting = 'Hello {0}, how are you?'
 ";
 
     [Fact]
     public void GenerateClassesBasedOnDDDRegistry()
     {
         // Create an instance of the source generator.
-        var generator = new SampleSourceGenerator();
+        var generator = new Generator();
 
         // Source generators should be tested using 'GeneratorDriver'.
         var driver = CSharpGeneratorDriver.Create(new[] { generator },
@@ -28,7 +34,7 @@ hello_world = 'Hello World'
             });
 
         // To run generators, we can use an empty compilation.
-        var compilation = CSharpCompilation.Create(nameof(SampleSourceGeneratorTests));
+        var compilation = CSharpCompilation.Create(nameof(GeneratorTests));
 
         // Run generators. Don't forget to use the new compilation rather than the previous one.
         driver.RunGeneratorsAndUpdateCompilation(compilation, out var newCompilation, out _);

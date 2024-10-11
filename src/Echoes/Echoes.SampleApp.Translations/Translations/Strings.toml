@@ -1,5 +1,6 @@
 [echoes_config]
 generated_class_name = "Strings"
+generated_namespace = "Echoes.SampleApp.Translations"
 
 [translations]
 hello_world = 'Hello World'
