@@ -6,6 +6,15 @@
   </p>
 </p>
 
+<p align="center">
+  <img src="/img/editor-demo.png" width="80%"/>
+</p>
+
+### Features
+- Change language at runtime (obviously - but hard with ResX)
+- Translation keys are generated at compile time. Missing keys (from the invariant) will show up as compiler errors.
+- [Markup extension](https://docs.avaloniaui.net/docs/concepts/markupextensions) for simple usage
+- Simple translation file format based on [TOML](https://toml.io/en/)
 
 ### Getting Started
 Add references to the following packages:
