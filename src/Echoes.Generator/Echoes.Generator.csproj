@@ -13,6 +13,7 @@
         <!-- nuget package info -->
         <Version>$(EchoesVersion)</Version>
         <PackageVersion>$(EchoesVersion)</PackageVersion>
+        <PackageIcon>icon.png</PackageIcon>
         <Authors>Voyonic Systems GmbH</Authors>
         <Product>Echoes.Generator</Product>
         <Title>Echoes.Generator</Title>
@@ -27,8 +28,13 @@
             $(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb
         </AllowedOutputExtensionsInPackageBuildOutputFolder>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Do not include the generator as a lib dependency -->
+
     </PropertyGroup>
     <ItemGroup>
+        <!-- Package the generator in the analyzer directory of the nuget package -->
+        <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+        <None Include="..\..\img\icon.png" Pack="true" PackagePath=""/>
         <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
     <ItemGroup>

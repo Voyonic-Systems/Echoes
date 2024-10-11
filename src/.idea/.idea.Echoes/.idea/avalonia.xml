@@ -4,6 +4,7 @@
     <option name="projectPerEditor">
       <map>
         <entry key="Echoes.SampleApp/App.axaml" value="Echoes.SampleApp/Echoes.SampleApp.csproj" />
+        <entry key="Echoes.SampleApp/MainWindow.axaml" value="Echoes.SampleApp/Echoes.SampleApp.csproj" />
         <entry key="Echoes.SampleApp/Views/MainWindow.axaml" value="Echoes.SampleApp/Echoes.SampleApp.csproj" />
       </map>
     </option>

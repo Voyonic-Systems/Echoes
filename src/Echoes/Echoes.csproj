@@ -8,6 +8,7 @@
         <Version>$(EchoesVersion)</Version>
         <PackageVersion>$(EchoesVersion)</PackageVersion>
         <Authors>Voyonic Systems GmbH</Authors>
+        <PackageIcon>icon.png</PackageIcon>
         <Product>Echoes</Product>
         <Title>Echoes</Title>
         <PackageId>Echoes</PackageId>
@@ -23,6 +24,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
     <ItemGroup>
+        <None Include="..\..\img\icon.png" Pack="true" PackagePath=""/>
         <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
