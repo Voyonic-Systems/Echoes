@@ -17,6 +17,9 @@
 - Simple translation file format based on [TOML](https://toml.io/en/)
 
 ### Getting Started
+
+It's best to take a look at the [Sample Project](https://github.com/Voyonic-Systems/Echoes/tree/main/src/Echoes.SampleApp)
+
 Add references to the following packages:
 ```xml
 <PackageReference Include="Echoes" Version=".."/>
