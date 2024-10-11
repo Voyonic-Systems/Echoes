@@ -1,0 +1,47 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:echoes="clr-namespace:Echoes;assembly=Echoes"
+        xmlns:sampleApp="clr-namespace:Echoes.SampleApp"
+        xmlns:translations="clr-namespace:Echoes.SampleApp.Translations;assembly=Echoes.SampleApp.Translations"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Echoes.SampleApp.MainWindow"
+        x:DataType="sampleApp:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Echoes.SampleApp">
+
+    <DockPanel>
+        <UniformGrid DockPanel.Dock="Bottom" Columns="3" Rows="1">
+            <Button Command="{Binding SetCultureCommand}" CommandParameter="english">
+                English
+            </Button>
+            <Button Command="{Binding SetCultureCommand}" CommandParameter="german">
+                German
+            </Button>
+            <Button Command="{Binding SetCultureCommand}" CommandParameter="chinese">
+                Chinese
+            </Button>
+        </UniformGrid>
+
+        <DockPanel
+            DockPanel.Dock="Top">
+
+            <TextBlock
+                Text="{echoes:Translate {x:Static translations:Strings.greeting}}"/>
+
+            <TextBox
+                Text="{Binding Name}"/>
+
+        </DockPanel>
+
+        <ContentControl
+            DockPanel.Dock="Top"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center">
+            <TextBlock
+                FontSize="64"
+                Text="{echoes:Translate {x:Static translations:Strings.hello_world}}"/>
+        </ContentControl>
+    </DockPanel>
+</Window>
