@@ -84,5 +84,8 @@ hello_world = 'Hallo Welt'
 greeting = 'Hallo {0}, wie geht es dir?'
 ```
 
+### Is this library stable?
+No, it's currently in preview. See the version number.
+
 ### Why is it named "Echoes"?
 The library is named after the Pink Floyd song [Echoes](https://en.wikipedia.org/wiki/Echoes_(Pink_Floyd_song)).
