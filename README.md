@@ -15,6 +15,7 @@
 - Translation keys are generated at compile time. Missing keys (from the invariant) will show up as compiler errors.
 - [Markup extension](https://docs.avaloniaui.net/docs/concepts/markupextensions) for simple usage
 - Simple translation file format based on [TOML](https://toml.io/en/)
+- Multiple translation files, so you can split translations by feature, ..
 
 ### Getting Started
 
