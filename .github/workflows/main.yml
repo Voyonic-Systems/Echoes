@@ -26,7 +26,7 @@ jobs:
       run: dotnet build src/Echoes/Echoes.csproj -c Release
       
     - name: Build for release
-      run: dotnet build src/Echoes/Echoes.Generator.csproj -c Release
+      run: dotnet build src/Echoes.Generator/Echoes.Generator.csproj -c Release
       
     - name: Publish Packages (if this version was not published before)
       run: dotnet nuget push src/**/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }} --skip-duplicate
