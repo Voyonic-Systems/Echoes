@@ -6,5 +6,37 @@
   </p>
 </p>
 
+### Getting Started
+Add references to the following packages:
+```xml
+<PackageReference Include="Echoes" Version=".."/>
+<PackageReference Include="Echoes.Generator" Version=".."/>
+```
+
+### Translation Files
+Translations are loaded from `.toml` files. The invariant file is **special** as it's structure included configuration data. 
+Language files are identified by `_{lang}.toml` postfix. 
+
+```
+Strings.toml
+Strings_de.toml
+Strings_es.toml
+```
+
+You can split translations in multiple toml files. 
+
+```
+FeatureA.toml
+FeatureA_de.toml
+FeatureA_es.toml
+
+FeatureB.toml
+FeatureB_de.toml
+FeatureB_es.toml
+```
+
+
+
+
 ### Why is it named "Echoes"?
 The library is named after the Pink Floyd song [Echoes](https://en.wikipedia.org/wiki/Echoes_(Pink_Floyd_song)).
