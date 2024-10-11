@@ -13,6 +13,17 @@ Add references to the following packages:
 <PackageReference Include="Echoes.Generator" Version=".."/>
 ```
 
+Specify translations files (Embedded Resources, Source Generator)
+```xml
+<ItemGroup>
+    <!-- Include all .toml files as embedded resources (so we can dynamically load them at runtime) -->
+    <EmbeddedResource Include="**\*.toml" />
+
+    <!-- Specify invariant files that are fed into the generator (Echoes.Generator) -->
+    <AdditionalFiles Include="Translations\Strings.toml" />
+</ItemGroup>
+```
+
 ### Translation Files
 Translations are loaded from `.toml` files. The invariant file is **special** as it's structure included configuration data. 
 Language files are identified by `_{lang}.toml` postfix. 
