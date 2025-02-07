@@ -10,19 +10,19 @@ namespace Echoes;
 
 public class FileTranslationProvider
 {
-    private readonly string _filePath;
+    private readonly string _embeddedResourceKey;
     private readonly Assembly _assembly;
 
     private readonly ImmutableDictionary<string, string> _invariantTranslations;
     private (CultureInfo Culture, ImmutableDictionary<string, string> Lookup)? _translations;
 
-    public FileTranslationProvider(Assembly assembly, string filePath)
+    public FileTranslationProvider(Assembly assembly, string embeddedResourceKey)
     {
-        _filePath = filePath;
+        _embeddedResourceKey = embeddedResourceKey;
         _assembly = assembly;
 
         _invariantTranslations =
-            ReadResource(assembly, filePath)
+            ReadResource(assembly, embeddedResourceKey)
             ?? throw new Exception("Embedded resource could not be found. ");
 
         _translations = null;
@@ -38,7 +38,7 @@ public class FileTranslationProvider
 
         if (lookup == null || (!lookupCulture?.Equals(culture) ?? false))
         {
-            var fileName = Path.GetFileNameWithoutExtension(_filePath);
+            var fileName = Path.GetFileNameWithoutExtension(_embeddedResourceKey);
             var fullName = fileName + "_" + culture.TwoLetterISOLanguageName + ".toml";
 
             var fullMatch = ReadResource(_assembly, fullName) ?? ImmutableDictionary<string, string>.Empty;
@@ -67,7 +67,7 @@ public class FileTranslationProvider
 
         var resourcePath =
             resourceNames
-                .FirstOrDefault(str => str.EndsWith(file.Replace("/", "."), StringComparison.OrdinalIgnoreCase));
+                .FirstOrDefault(str => str.EndsWith(file.Replace("/", ".").Replace(@"\", "."), StringComparison.OrdinalIgnoreCase));
 
         if (resourcePath == null)
             return null;
