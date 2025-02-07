@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
         <AvaloniaVersion>11.1.0</AvaloniaVersion>
-        <EchoesVersion>0.1.2</EchoesVersion>
+        <EchoesVersion>0.1.3</EchoesVersion>
     </PropertyGroup>
 </Project>

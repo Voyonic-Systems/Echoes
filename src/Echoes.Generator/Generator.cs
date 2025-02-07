@@ -153,7 +153,7 @@ public class Generator : ISourceGenerator
         sb.AppendLine($"public static class {file.GeneratorClassName}");
         sb.AppendLine("{");
 
-        sb.AppendLine($"\tprivate static readonly string _file = \"{file.ProjectRelativeTomlFilePath}\";");
+        sb.AppendLine($"\tprivate static readonly string _file = @\"{file.ProjectRelativeTomlFilePath}\";");
         sb.AppendLine($"\tprivate static readonly Assembly _assembly = typeof({file.GeneratorClassName}).Assembly;");
 
         foreach (var key in file.Units)
