@@ -9,6 +9,8 @@ public class TranslationUnit
     private BehaviorSubject<string?> _value;
 
     public IObservable<string?> Value => _value;
+    
+    public string? CurrentValue => _value.Value;
 
     public string SourceFile { get; }
     public string Key { get; }
