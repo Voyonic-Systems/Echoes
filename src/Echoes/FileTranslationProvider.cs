@@ -28,7 +28,7 @@ public class FileTranslationProvider
         _translations = null;
     }
 
-    public string? ReadTranslation(string key, CultureInfo culture)
+    public string ReadTranslation(string key, CultureInfo culture)
     {
         if (culture == null)
             throw new ArgumentNullException(nameof(culture));
@@ -57,7 +57,8 @@ public class FileTranslationProvider
         }
         else
         {
-            return null;
+            // NOTE: This should never happen!
+            return "TRANSLATION NOT FOUND: " + key;
         }
     }
 

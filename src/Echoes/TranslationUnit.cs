@@ -6,11 +6,11 @@ namespace Echoes;
 
 public class TranslationUnit
 {
-    private BehaviorSubject<string?> _value;
+    private BehaviorSubject<string> _value;
 
-    public IObservable<string?> Value => _value;
+    public IObservable<string> Value => _value;
     
-    public string? CurrentValue => _value.Value;
+    public string CurrentValue => _value.Value;
 
     public string SourceFile { get; }
     public string Key { get; }
@@ -20,7 +20,7 @@ public class TranslationUnit
         SourceFile = sourceFile;
         Key = key;
 
-        _value = new BehaviorSubject<string?>(TranslationProvider.ReadTranslation(assembly, sourceFile, key, TranslationProvider.Culture));
+        _value = new BehaviorSubject<string>(TranslationProvider.ReadTranslation(assembly, sourceFile, key, TranslationProvider.Culture));
 
         TranslationProvider.OnCultureChanged += (sender, info) =>
         {

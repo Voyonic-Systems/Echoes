@@ -26,7 +26,7 @@ public static class TranslationProvider
         OnCultureChanged?.Invoke(null, _culture);
     }
 
-    public static string? ReadTranslation(Assembly assembly, string file, string key, CultureInfo culture)
+    public static string ReadTranslation(Assembly assembly, string file, string key, CultureInfo culture)
     {
         if (_providers.TryGetValue(file, out var provider))
         {
