@@ -39,9 +39,15 @@ public class FileTranslationProvider
         if (lookup == null || (!lookupCulture?.Equals(culture) ?? false))
         {
             var fileName = Path.GetFileNameWithoutExtension(_embeddedResourceKey);
-            var fullName = fileName + "_" + culture.TwoLetterISOLanguageName + ".toml";
+            var fullName = fileName + "_" + culture.Name + ".toml";
 
-            var fullMatch = ReadResource(_assembly, fullName) ?? ImmutableDictionary<string, string>.Empty;
+            ImmutableDictionary<string, string>? resource = ReadResource(_assembly, fullName);
+            if (resource == null)
+            {
+                fullName = fileName + "_" + culture.TwoLetterISOLanguageName + ".toml";
+                resource = ReadResource(_assembly, fullName);
+            }
+            var fullMatch = resource ?? ImmutableDictionary<string, string>.Empty;
             _translations = (culture, fullMatch);
 
             lookup = fullMatch;
