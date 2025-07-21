@@ -1,8 +1,7 @@
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Echoes.Generator.Tests.Utils;
+using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 
 namespace Echoes.Generator.Tests;
@@ -26,14 +25,13 @@ greeting = 'Hello {0}, how are you?'
         // Create an instance of the source generator.
         var generator = new Generator();
 
-        IEnumerable<AdditionalText> additionalTexts = new[]
+        // Source generators should be tested using 'GeneratorDriver'.
+        var driver = CSharpGeneratorDriver.Create(new[] { generator },
+            new[]
             {
                 // Add the additional file separately from the compilation.
-                new Utils.TestAdditionalFile("./Strings.toml", TranslationFileText)
-            } as IEnumerable<AdditionalText>;
-
-        // Source generators should be tested using 'GeneratorDriver'.
-        var driver = CSharpGeneratorDriver.Create([generator.AsSourceGenerator()], additionalTexts, CSharpParseOptions.Default);
+                new TestAdditionalFile("./Strings.toml", TranslationFileText)
+            });
 
         // To run generators, we can use an empty compilation.
         var compilation = CSharpCompilation.Create(nameof(GeneratorTests));
