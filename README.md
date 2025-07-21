@@ -16,6 +16,7 @@
 - [Markup extension](https://docs.avaloniaui.net/docs/concepts/markupextensions) for simple usage
 - Simple translation file format based on [TOML](https://toml.io/en/)
 - Multiple translation files, so you can split translations by feature, ..
+- Supports [ISO 639-1 (en, de)](https://en.wikipedia.org/wiki/ISO_639-1) and [RRC 5646 (en-US, en-GB, de-DE)](https://www.rfc-editor.org/rfc/rfc5646.html) translation identifiers
 
 ### Getting Started
 
