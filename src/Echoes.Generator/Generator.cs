@@ -1,15 +1,15 @@
+using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Text;
-using Microsoft.CodeAnalysis;
 using Tommy;
 
 namespace Echoes.Generator;
 
 [Generator]
-public class Generator : ISourceGenerator
+public class Generator : IIncrementalGenerator
 {
     public record InvariantLanguageFile
     {
@@ -33,49 +33,63 @@ public class Generator : ISourceGenerator
         }
     }
 
-    public void Initialize(GeneratorInitializationContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext context)
     {
 
-    }
+        // This will provide all additional files as input to your pipeline
+        var additionalFiles = context.AdditionalTextsProvider;
 
-    public void Execute(GeneratorExecutionContext context)
-    {
-        var translationFiles = FindRelevantFiles(context.AdditionalFiles);
+        IncrementalValueProvider<string> projectDirProvider = context.AnalyzerConfigOptionsProvider
+           .Select((provider, cancellationToken) =>
+           {
+               // Try to get the value from MSBuild properties.
+               provider.GlobalOptions.TryGetValue("build_property.projectdir", out var projectDir);
+               return projectDir ?? string.Empty;
+           });
 
-        foreach (var file in translationFiles)
+        IncrementalValuesProvider<AdditionalText> translationFiles = context.AdditionalTextsProvider.Where(text => IsFileRelevant(text));
+
+        var combinedProvider = translationFiles.Combine(projectDirProvider);
+
+        IncrementalValuesProvider<(string fileName, string content)> fileContents = combinedProvider.Select((source, cancellationToken) =>
         {
-            GenerateKeysFile(file, context);
-        }
-    }
+            (AdditionalText text, string projectDir) = source;
 
-    private static ImmutableArray<AdditionalText> FindRelevantFiles(ImmutableArray<AdditionalText> additionalFiles)
-    {
-        var translationFiles = new List<AdditionalText>();
+            var fileName = Path.GetFileNameWithoutExtension(text.Path);
+            var content = GenerateKeysFileText(text, projectDir, context);
 
-        foreach (var additionalFile in additionalFiles)
+            return (fileName, content);
+        });
+
+        context.RegisterSourceOutput(fileContents, static (spc, data) =>
         {
-            if (additionalFile == null)
-                continue;
+            var (fileName, sourceCode) = data;
+            spc.AddSource($"{fileName}.g.cs", sourceCode);
+        });
 
-            if (!additionalFile.Path.EndsWith(".toml"))
-                continue;
 
-            var text = additionalFile.GetText();
-
-            if (text == null)
-                continue;
-
-            var stringText = text.ToString();
-
-            if (stringText.Contains("[echoes_config]"))
-                translationFiles.Add(additionalFile);
-
-        }
-
-        return translationFiles.ToImmutableArray();
     }
 
-    private static InvariantLanguageFile? ParseTomlFiles(AdditionalText translationFile, GeneratorExecutionContext context)
+    private static bool IsFileRelevant(AdditionalText? additionalFile)
+    {
+
+        if (additionalFile == null)
+            return false;
+
+        if (!additionalFile.Path.EndsWith(".toml"))
+            return false;
+
+        var text = additionalFile.GetText();
+
+        if (text == null)
+            return false;
+
+        var stringText = text.ToString();
+
+        return stringText.Contains("[echoes_config]");
+    }
+
+    private static InvariantLanguageFile? ParseTomlFiles(AdditionalText translationFile, string projectDir, IncrementalGeneratorInitializationContext context)
     {
         var keys = new List<string>();
 
@@ -102,14 +116,13 @@ public class Generator : ISourceGenerator
         if (!generatedNamespace.IsString)
             return null;
 
-        var projectFolder = context.GetCallingPath();
         var sourceFile = translationFile.Path;
 
         var trimmedSourceFile = sourceFile;
 
-        if (sourceFile.StartsWith(projectFolder))
+        if (sourceFile.StartsWith(projectDir))
         {
-            trimmedSourceFile = sourceFile.Substring(projectFolder.Length);
+            trimmedSourceFile = sourceFile.Substring(projectDir.Length);
         }
 
         if (!root.RawTable.TryGetValue("translations", out var translations))
@@ -133,9 +146,9 @@ public class Generator : ISourceGenerator
         );
     }
 
-    private static void GenerateKeysFile (AdditionalText translationFile, GeneratorExecutionContext context)
+    private static string GenerateKeysFileText(AdditionalText translationFile, string projectDir, IncrementalGeneratorInitializationContext context)
     {
-        var file = ParseTomlFiles(translationFile, context);
+        var file = ParseTomlFiles(translationFile, projectDir, context);
 
         if (file == null)
             throw new Exception("Failed to parse translation file");
@@ -163,8 +176,6 @@ public class Generator : ISourceGenerator
 
         sb.AppendLine("}");
 
-        var text = sb.ToString();
-
-        context.AddSource(file.GeneratorClassName + ".g.cs", text);
+        return sb.ToString();
     }
 }
