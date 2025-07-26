@@ -98,19 +98,19 @@ public class Generator : IIncrementalGenerator
         var parser = new TOMLParser(reader);
         var root = parser.Parse();
 
-        if (!root.RawTable.TryGetValue("echoes_config", out var echoesConfig))
+        if (!root.RawTable.TryGetValue("echoes_config", out var echoesConfig) || echoesConfig == null)
             return null;
 
         if (!echoesConfig.IsTable)
             return null;
 
-        if (!echoesConfig.AsTable.RawTable.TryGetValue("generated_class_name", out var generatedClassName))
+        if (echoesConfig.AsTable?.RawTable.TryGetValue("generated_class_name", out var generatedClassName) != true || generatedClassName == null)
             return null;
 
         if (!generatedClassName.IsString)
             return null;
 
-        if (!echoesConfig.AsTable.RawTable.TryGetValue("generated_namespace", out var generatedNamespace))
+        if (!echoesConfig.AsTable.RawTable.TryGetValue("generated_namespace", out var generatedNamespace) || generatedNamespace == null)
             return null;
 
         if (!generatedNamespace.IsString)
@@ -128,11 +128,14 @@ public class Generator : IIncrementalGenerator
         if (!root.RawTable.TryGetValue("translations", out var translations))
             return null;
 
-        foreach (var pair in translations.AsTable.RawTable)
+        if (translations?.AsTable != null)
         {
-            if (pair.Value.IsString)
+            foreach (var pair in translations.AsTable.RawTable)
             {
-                  keys.Add(pair.Key);
+                if (pair.Value?.IsString == true)
+                {
+                    keys.Add(pair.Key);
+                }
             }
         }
 
@@ -140,8 +143,8 @@ public class Generator : IIncrementalGenerator
 
         return new InvariantLanguageFile(
             trimmedSourceFile,
-            generatedNamespace.AsString,
-            generatedClassName.AsString,
+            generatedNamespace.AsString!,
+            generatedClassName.AsString!,
             units
         );
     }

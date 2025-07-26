@@ -10,7 +10,7 @@ public static class TranslationProvider
     private static CultureInfo _culture;
     private static ConcurrentDictionary<string, FileTranslationProvider> _providers;
 
-    public static event EventHandler<CultureInfo> OnCultureChanged;
+    public static event EventHandler<CultureInfo>? OnCultureChanged;
 
     public static CultureInfo Culture => _culture;
 
