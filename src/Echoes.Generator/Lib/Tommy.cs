@@ -26,6 +26,8 @@
 
 #endregion
 
+#nullable enable
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -51,34 +53,34 @@ namespace Tommy
         public virtual bool IsDateTimeLocal { get; } = false;
         public virtual bool IsDateTimeOffset { get; } = false;
         public virtual bool IsBoolean { get; } = false;
-        public virtual string Comment { get; set; }
+        public virtual string? Comment { get; set; }
         public virtual int CollapseLevel { get; set; }
 
-        public virtual TomlTable AsTable => this as TomlTable;
-        public virtual TomlString AsString => this as TomlString;
-        public virtual TomlInteger AsInteger => this as TomlInteger;
-        public virtual TomlFloat AsFloat => this as TomlFloat;
-        public virtual TomlBoolean AsBoolean => this as TomlBoolean;
-        public virtual TomlDateTimeLocal AsDateTimeLocal => this as TomlDateTimeLocal;
-        public virtual TomlDateTimeOffset AsDateTimeOffset => this as TomlDateTimeOffset;
-        public virtual TomlDateTime AsDateTime => this as TomlDateTime;
-        public virtual TomlArray AsArray => this as TomlArray;
+        public virtual TomlTable? AsTable => this as TomlTable;
+        public virtual TomlString? AsString => this as TomlString;
+        public virtual TomlInteger? AsInteger => this as TomlInteger;
+        public virtual TomlFloat? AsFloat => this as TomlFloat;
+        public virtual TomlBoolean? AsBoolean => this as TomlBoolean;
+        public virtual TomlDateTimeLocal? AsDateTimeLocal => this as TomlDateTimeLocal;
+        public virtual TomlDateTimeOffset? AsDateTimeOffset => this as TomlDateTimeOffset;
+        public virtual TomlDateTime? AsDateTime => this as TomlDateTime;
+        public virtual TomlArray? AsArray => this as TomlArray;
 
         public virtual int ChildrenCount => 0;
 
-        public virtual TomlNode this[string key]
+        public virtual TomlNode? this[string key]
         {
             get => null;
             set { }
         }
 
-        public virtual TomlNode this[int index]
+        public virtual TomlNode? this[int index]
         {
             get => null;
             set { }
         }
 
-        public virtual IEnumerable<TomlNode> Children
+        public virtual IEnumerable<TomlNode?>? Children
         {
             get { yield break; }
         }
@@ -88,9 +90,9 @@ namespace Tommy
             get { yield break; }
         }
 
-        public IEnumerator GetEnumerator() => Children.GetEnumerator();
+        public IEnumerator? GetEnumerator() => Children?.GetEnumerator();
 
-        public virtual bool TryGetNode(string key, out TomlNode node)
+        public virtual bool TryGetNode(string key, out TomlNode? node)
         {
             node = null;
             return false;
@@ -115,7 +117,7 @@ namespace Tommy
             foreach (var tomlNode in nodes) Add(tomlNode);
         }
 
-        public virtual void WriteTo(TextWriter tw, string name = null) => tw.WriteLine(ToInlineToml());
+        public virtual void WriteTo(TextWriter tw, string? name = null) => tw.WriteLine(ToInlineToml());
 
         public virtual string ToInlineToml() => ToString();
 
@@ -148,19 +150,19 @@ namespace Tommy
 
         public static implicit operator string(TomlNode value) => value.ToString();
 
-        public static implicit operator int(TomlNode value) => (int) value.AsInteger.Value;
+        public static implicit operator int(TomlNode value) => (int) (value.AsInteger?.Value ?? 0);
 
-        public static implicit operator long(TomlNode value) => value.AsInteger.Value;
+        public static implicit operator long(TomlNode value) => value.AsInteger?.Value ?? 0;
 
-        public static implicit operator float(TomlNode value) => (float) value.AsFloat.Value;
+        public static implicit operator float(TomlNode value) => (float) (value.AsFloat?.Value ?? 0);
 
-        public static implicit operator double(TomlNode value) => value.AsFloat.Value;
+        public static implicit operator double(TomlNode value) => (value.AsFloat?.Value ?? 0);
 
-        public static implicit operator bool(TomlNode value) => value.AsBoolean.Value;
+        public static implicit operator bool(TomlNode value) => value.AsBoolean?.Value ?? false;
 
-        public static implicit operator DateTime(TomlNode value) => value.AsDateTimeLocal.Value;
+        public static implicit operator DateTime(TomlNode value) => value.AsDateTimeLocal?.Value ?? DateTime.Now;
 
-        public static implicit operator DateTimeOffset(TomlNode value) => value.AsDateTimeOffset.Value;
+        public static implicit operator DateTimeOffset(TomlNode value) => value.AsDateTimeOffset?.Value ?? DateTimeOffset.Now;
 
         #endregion
     }
@@ -173,7 +175,7 @@ namespace Tommy
         public bool MultilineTrimFirstLine { get; set; }
         public bool PreferLiteral { get; set; }
 
-        public string Value { get; set; }
+        public string Value { get; set; } = string.Empty;
 
         public override string ToString() => Value;
 
@@ -311,7 +313,7 @@ namespace Tommy
 
     public class TomlArray : TomlNode
     {
-        private List<TomlNode> values;
+        private List<TomlNode>? values;
 
         public override bool HasValue { get; } = true;
         public override bool IsArray { get; } = true;
@@ -319,7 +321,7 @@ namespace Tommy
         public bool IsTableArray { get; set; }
         public List<TomlNode> RawArray => values ??= new List<TomlNode>();
 
-        public override TomlNode this[int index]
+        public override TomlNode? this[int index]
         {
             get
             {
@@ -328,12 +330,16 @@ namespace Tommy
                 this[index] = lazy;
                 return lazy;
             }
+
             set
             {
-                if (index == RawArray.Count)
-                    RawArray.Add(value);
-                else
-                    RawArray[index] = value;
+                if (value != null)
+                {
+                    if (index == RawArray.Count)
+                        RawArray.Add(value);
+                    else
+                        RawArray[index] = value;
+                }
             }
         }
 
@@ -371,7 +377,7 @@ namespace Tommy
             return sb.ToString();
         }
 
-        public override void WriteTo(TextWriter tw, string name = null)
+        public override void WriteTo(TextWriter tw, string? name = null)
         {
             // If it's a normal array, write it as usual
             if (!IsTableArray)
@@ -425,19 +431,19 @@ namespace Tommy
 
     public class TomlTable : TomlNode
     {
-        private Dictionary<string, TomlNode> children;
+        private Dictionary<string, TomlNode?>? children;
         internal bool isImplicit;
 
         public override bool HasValue { get; } = false;
         public override bool IsTable { get; } = true;
         public bool IsInline { get; set; }
-        public Dictionary<string, TomlNode> RawTable => children ??= new Dictionary<string, TomlNode>();
+        public Dictionary<string, TomlNode?> RawTable => children ??= new Dictionary<string, TomlNode?>();
 
-        public override TomlNode this[string key]
+        public override TomlNode? this[string key]
         {
             get
             {
-                if (RawTable.TryGetValue(key, out var result)) return result;
+                if (RawTable.TryGetValue(key, out var result) && result != null) return result;
                 var lazy = new TomlLazy(this);
                 RawTable[key] = lazy;
                 return lazy;
@@ -446,11 +452,11 @@ namespace Tommy
         }
 
         public override int ChildrenCount => RawTable.Count;
-        public override IEnumerable<TomlNode> Children => RawTable.Select(kv => kv.Value);
+        public override IEnumerable<TomlNode?>? Children => RawTable.Select(kv => kv.Value);
         public override IEnumerable<string> Keys => RawTable.Select(kv => kv.Key);
         public override bool HasKey(string key) => RawTable.ContainsKey(key);
         public override void Add(string key, TomlNode node) => RawTable.Add(key, node);
-        public override bool TryGetNode(string key, out TomlNode node) => RawTable.TryGetValue(key, out node);
+        public override bool TryGetNode(string key, out TomlNode? node) => RawTable.TryGetValue(key, out node);
         public override void Delete(TomlNode node) => RawTable.Remove(RawTable.First(kv => kv.Value == node).Key);
         public override void Delete(string key) => RawTable.Remove(key);
 
@@ -495,7 +501,7 @@ namespace Tommy
                     foreach (var kv in subnodes)
                         postNodes.AddLast(kv);
                 }
-                else if (node.CollapseLevel == level)
+                else if (node?.CollapseLevel == level)
                     nodes.AddLast(new KeyValuePair<string, TomlNode>($"{prefix}{key}", node));
             }
 
@@ -506,9 +512,9 @@ namespace Tommy
             return nodes;
         }
 
-        public override void WriteTo(TextWriter tw, string name = null) => WriteTo(tw, name, true);
+        public override void WriteTo(TextWriter tw, string? name = null) => WriteTo(tw, name, true);
 
-        internal void WriteTo(TextWriter tw, string name, bool writeSectionName)
+        internal void WriteTo(TextWriter tw, string? name, bool writeSectionName)
         {
             // The table is inline table
             if (IsInline && name != null)
@@ -567,29 +573,37 @@ namespace Tommy
     internal class TomlLazy : TomlNode
     {
         private readonly TomlNode parent;
-        private TomlNode replacement;
+        private TomlNode? replacement;
 
         public TomlLazy(TomlNode parent) => this.parent = parent;
 
-        public override TomlNode this[int index]
+        public override TomlNode? this[int index]
         {
-            get => Set<TomlArray>()[index];
-            set => Set<TomlArray>()[index] = value;
+            get => Set<TomlArray>()?[index];
+            set
+            {
+                if (Set<TomlArray>() != null && value != null) 
+                    Set<TomlArray>()![index] = value;
+            }
         }
 
-        public override TomlNode this[string key]
+        public override TomlNode? this[string key]
         {
-            get => Set<TomlTable>()[key];
-            set => Set<TomlTable>()[key] = value;
+            get => Set<TomlTable>()?[key];
+            set
+            {
+                if (Set<TomlArray>() != null)
+                    Set<TomlArray>()![key] = value;
+            }
         }
 
-        public override void Add(TomlNode node) => Set<TomlArray>().Add(node);
+        public override void Add(TomlNode node) => Set<TomlArray>()?.Add(node);
 
-        public override void Add(string key, TomlNode node) => Set<TomlTable>().Add(key, node);
+        public override void Add(string key, TomlNode node) => Set<TomlTable>()?.Add(key, node);
 
-        public override void AddRange(IEnumerable<TomlNode> nodes) => Set<TomlArray>().AddRange(nodes);
+        public override void AddRange(IEnumerable<TomlNode> nodes) => Set<TomlArray>()?.AddRange(nodes);
 
-        private TomlNode Set<T>() where T : TomlNode, new()
+        private TomlNode? Set<T>() where T : TomlNode, new()
         {
             if (replacement != null) return replacement;
 
@@ -600,7 +614,7 @@ namespace Tommy
 
             if (parent.IsTable)
             {
-                var key = parent.Keys.FirstOrDefault(s => parent.TryGetNode(s, out var node) && node.Equals(this));
+                var key = parent.Keys.FirstOrDefault(s => parent.TryGetNode(s, out var node) && node?.Equals(this) == true);
                 if (key == null) return default(T);
 
                 parent[key] = newNode;
@@ -638,7 +652,7 @@ namespace Tommy
         private readonly TextReader reader;
         private ParseState currentState;
         private int line, col;
-        private List<TomlSyntaxException> syntaxErrors;
+        private List<TomlSyntaxException>? syntaxErrors;
 
         public TOMLParser(TextReader reader)
         {
@@ -659,7 +673,7 @@ namespace Tommy
             currentState = ParseState.None;
             var keyParts = new List<string>();
             var arrayTable = false;
-            StringBuilder latestComment = null;
+            StringBuilder? latestComment = null;
             var firstComment = true;
 
             int currentChar;
@@ -858,7 +872,7 @@ namespace Tommy
 
         private bool AddError(string message, bool skipLine = true)
         {
-            syntaxErrors.Add(new TomlSyntaxException(message, currentState, line, col));
+            syntaxErrors?.Add(new TomlSyntaxException(message, currentState, line, col));
             // Skip the whole line in hope that it was only a single faulty value (and non-multiline one at that)
             if (skipLine)
             {
@@ -892,7 +906,7 @@ namespace Tommy
          * foo = "bar"  ==> foo = "bar"
          * ^                           ^
          */
-        private TomlNode ReadKeyValuePair(List<string> keyParts)
+        private TomlNode? ReadKeyValuePair(List<string> keyParts)
         {
             int cur;
             while ((cur = reader.Peek()) >= 0)
@@ -941,7 +955,7 @@ namespace Tommy
          * "test"  ==> "test"
          * ^                 ^
          */
-        private TomlNode ReadValue(bool skipNewlines = false)
+        private TomlNode? ReadValue(bool skipNewlines = false)
         {
             int cur;
             while ((cur = reader.Peek()) >= 0)
@@ -1133,10 +1147,10 @@ namespace Tommy
          *     ==>  1_0_0_0 # This is a comment
          *     ^                                                  ^
          */
-        private TomlNode ReadTomlValue()
+        private TomlNode? ReadTomlValue()
         {
             var value = ReadRawValue();
-            TomlNode node = value switch
+            TomlNode? node = value switch
             {
                 var v when TomlSyntax.IsBoolean(v) => bool.Parse(v),
                 var v when TomlSyntax.IsNaN(v)     => double.NaN,
@@ -1217,12 +1231,12 @@ namespace Tommy
          * [1, 2, 3]  ==>  [1, 2, 3]
          * ^                        ^
          */
-        private TomlArray ReadArray()
+        private TomlArray? ReadArray()
         {
             // Consume the start of array character
             ConsumeChar();
             var result = new TomlArray();
-            TomlNode currentValue = null;
+            TomlNode? currentValue = null;
             var expectValue = true;
 
             int cur;
@@ -1295,11 +1309,11 @@ namespace Tommy
          * { test = "foo", value = 1 }  ==>  { test = "foo", value = 1 }
          * ^                                                            ^
          */
-        private TomlNode ReadInlineTable()
+        private TomlNode? ReadInlineTable()
         {
             ConsumeChar();
             var result = new TomlTable {IsInline = true};
-            TomlNode currentValue = null;
+            TomlNode? currentValue = null;
             var separator = false;
             var keyParts = new List<string>();
             int cur;
@@ -1453,7 +1467,7 @@ namespace Tommy
          * "test"  ==>  "test"
          * ^                 ^
          */
-        private string ReadQuotedValueSingleLine(char quote, char initialData = '\0')
+        private string? ReadQuotedValueSingleLine(char quote, char initialData = '\0')
         {
             var isNonLiteral = quote == TomlSyntax.BASIC_STRING_SYMBOL;
             var sb = new StringBuilder();
@@ -1468,7 +1482,8 @@ namespace Tommy
                     if (isNonLiteral)
                     {
                         if (sb.ToString().TryUnescape(out var res, out var ex)) return res;
-                        AddError(ex.Message);
+                        if (ex != null)
+                            AddError(ex.Message);
                         return null;
                     }
                     else
@@ -1498,7 +1513,8 @@ namespace Tommy
 
             if (!isNonLiteral) return sb.ToString();
             if (sb.ToString().TryUnescape(out var unescaped, out var unescapedEx)) return unescaped;
-            AddError(unescapedEx.Message);
+            if (unescapedEx != null)
+                AddError(unescapedEx.Message);
             return null;
         }
 
@@ -1511,7 +1527,7 @@ namespace Tommy
          * """test"""  ==>  """test"""
          * ^                       ^
          */
-        private string ReadQuotedValueMultiLine(char quote)
+        private string? ReadQuotedValueMultiLine(char quote)
         {
             var isBasic = quote == TomlSyntax.BASIC_STRING_SYMBOL;
             var sb = new StringBuilder();
@@ -1621,7 +1637,8 @@ namespace Tommy
             sb.Length -= 2;
             if (!isBasic) return sb.ToString();
             if (sb.ToString().TryUnescape(out var res, out var ex)) return res;
-            AddError(ex.Message);
+            if (ex != null)
+                AddError(ex.Message);
             return null;
         }
 
@@ -1636,7 +1653,7 @@ namespace Tommy
                 for (var index = 0; index < path.Count - 1; index++)
                 {
                     var subkey = path[index];
-                    if (latestNode.TryGetNode(subkey, out var currentNode))
+                    if (latestNode.TryGetNode(subkey, out var currentNode) && currentNode != null)
                     {
                         if (currentNode.HasValue)
                             return AddError($"The key {".".Join(path)} already has a value assigned to it!");
@@ -1659,15 +1676,19 @@ namespace Tommy
             return true;
         }
 
-        private TomlTable CreateTable(TomlNode root, IList<string> path, bool arrayTable)
+        private TomlTable? CreateTable(TomlNode root, IList<string> path, bool arrayTable)
         {
-            if (path.Count == 0) return null;
-            var latestNode = root;
+            if (path.Count == 0) 
+                return null;
+            TomlNode? latestNode = root;
             for (var index = 0; index < path.Count; index++)
             {
                 var subkey = path[index];
 
-                if (latestNode.TryGetNode(subkey, out var node))
+                if (latestNode is null)
+                    break;
+
+                if (latestNode.TryGetNode(subkey, out var node) && node != null)
                 {
                     if (node.IsArray && arrayTable)
                     {
@@ -1745,8 +1766,9 @@ namespace Tommy
                 latestNode = node;
             }
 
-            var result = (TomlTable) latestNode;
-            result.isImplicit = false;
+            var result = (TomlTable?) latestNode;
+            if (result != null)
+                result.isImplicit = false;
             return result;
         }
 
@@ -2012,7 +2034,7 @@ namespace Tommy
                                                string[] formats,
                                                DateTimeStyles styles,
                                                TryDateParseDelegate<T> parser,
-                                               out T dateTime,
+                                               out T? dateTime,
                                                out int parsedFormat)
         {
             parsedFormat = 0;
@@ -2071,7 +2093,7 @@ namespace Tommy
             return stringBuilder.ToString();
         }
 
-        public static bool TryUnescape(this string txt, out string unescaped, out Exception exception)
+        public static bool TryUnescape(this string txt, out string? unescaped, out Exception? exception)
         {
             try
             {
