@@ -92,11 +92,14 @@ public class FileTranslationProvider
         {
             var immutableDict = ImmutableDictionary.CreateBuilder<string, string>();
 
-            foreach (var pair in translations.AsTable.RawTable)
+            if (translations?.AsTable is TomlTable tomlTable)
             {
-                if (pair.Value.IsString)
+                foreach (var pair in tomlTable.RawTable)
                 {
-                    immutableDict.Add(pair.Key, pair.Value.AsString);
+                    if (pair.Value?.IsString == true)
+                    {
+                        immutableDict.Add(pair.Key, pair.Value.AsString!);
+                    }
                 }
             }
 
@@ -108,9 +111,9 @@ public class FileTranslationProvider
 
             foreach (var pair in root.RawTable)
             {
-                if (pair.Value.IsString)
+                if (pair.Value?.IsString == true)
                 {
-                    immutableDict.Add(pair.Key, pair.Value.AsString);
+                    immutableDict.Add(pair.Key, pair.Value.AsString!);
                 }
             }
 
