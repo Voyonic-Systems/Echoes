@@ -11,7 +11,7 @@
 </p>
 
 ### Features
-- Change language at runtime (obviously - but hard with ResX)
+- Change language at runtime without reloading views or flicker (obviously - but hard with ResX)
 - Translation keys are generated at compile time. Missing keys (from the invariant) will show up as compiler errors.
 - [Markup extension](https://docs.avaloniaui.net/docs/concepts/markupextensions) for simple usage
 - Simple translation file format based on [TOML](https://toml.io/en/)
