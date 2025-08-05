@@ -17,6 +17,9 @@
 - Simple translation file format based on [TOML](https://toml.io/en/)
 - Multiple translation files, so you can split translations by feature, ..
 - Supports [ISO 639-1 (en, de)](https://en.wikipedia.org/wiki/ISO_639-1) and [RRC 5646 (en-US, en-GB, de-DE)](https://www.rfc-editor.org/rfc/rfc5646.html) translation identifiers
+- Autocomplete of translation keys
+  <img width="952" height="151" alt="Screenshot 2025-08-05 at 10 03 21" src="https://github.com/user-attachments/assets/98d8aa66-50bc-4778-928d-b93d1da579ae" />
+
 
 ### Getting Started
 
