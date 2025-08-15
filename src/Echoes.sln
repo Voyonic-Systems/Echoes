@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36221.1 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Echoes", "Echoes\Echoes.csproj", "{763648F3-CF4D-4052-A2B0-855449ACF68A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Echoes.SampleApp", "Echoes.SampleApp\Echoes.SampleApp.csproj", "{4DAC7EC9-4AB6-4C19-A693-178BF1096301}"
@@ -12,10 +15,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Echoes.SampleApp.Translatio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{DCBA01BE-BC2F-4101-B800-953450C70B45}"
 	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
 		Directory.Build.props = Directory.Build.props
+		global.json = global.json
 		..\README.md = ..\README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Echoes.Avalonia", "Echoes.Avalonia\Echoes.Avalonia.csproj", "{8A1D6024-4CD5-74F5-B1F6-77E2D15589B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,5 +48,15 @@ Global
 		{6F12EF5D-EC8B-47B6-A545-884E85827103}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F12EF5D-EC8B-47B6-A545-884E85827103}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F12EF5D-EC8B-47B6-A545-884E85827103}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A1D6024-4CD5-74F5-B1F6-77E2D15589B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A1D6024-4CD5-74F5-B1F6-77E2D15589B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A1D6024-4CD5-74F5-B1F6-77E2D15589B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A1D6024-4CD5-74F5-B1F6-77E2D15589B4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5830B9A2-9CE5-43F2-B3FF-86C1AF9E95B6}
 	EndGlobalSection
 EndGlobal

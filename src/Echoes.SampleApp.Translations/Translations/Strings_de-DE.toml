@@ -1,0 +1,2 @@
+hello_world = 'Hallo Welt DE'
+greeting = 'Hallo {0}, wie geht es dir?'

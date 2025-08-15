@@ -11,8 +11,8 @@
         <PackageIcon>icon.png</PackageIcon>
         <Product>Echoes</Product>
         <Title>Echoes</Title>
-        <PackageId>Echoes</PackageId>
-        <Description>Simple type safe translations for .NET</Description>
+        <PackageId>Echoes.Avalonia</PackageId>
+        <Description>Simple type safe translations for Avalonia</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/Voyonic-Systems/Echoes</PackageProjectUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -23,17 +23,18 @@
         </AllowedOutputExtensionsInPackageBuildOutputFolder>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
-
-    <ItemGroup>
-      <Compile Include="..\Shared\Tommy.cs" Link="Tommy.cs" />
-    </ItemGroup>
     <ItemGroup>
         <None Include="..\..\img\icon.png" Pack="true" PackagePath="" />
         <None Include="..\..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
       <PackageReference Include="System.Reactive" Version="6.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Echoes\Echoes.csproj" />
     </ItemGroup>
 
 </Project>
