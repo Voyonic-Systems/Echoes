@@ -2,7 +2,7 @@
   <img src="/img/icon.webp" width="100"/>
   <h1 align="center">Echoes</h1>
   <p align="center">
-    Simple type safe translations for Avalonia
+    Simple type safe translations for Avalonia and MAUI (and anything else .NET)
   </p>
 </p>
 
@@ -13,19 +13,29 @@
 ### Features
 - Change language at runtime (obviously - but hard with ResX)
 - Translation keys are generated at compile time. Missing keys (from the invariant) will show up as compiler errors.
-- [Markup extension](https://docs.avaloniaui.net/docs/concepts/markupextensions) for simple usage
+- [Avalonia Markup extension](https://docs.avaloniaui.net/docs/concepts/markupextensions) and [MAUI Markup extension](https://learn.microsoft.com/en-us/dotnet/maui/xaml/fundamentals/markup-extensions) for simple usage in design-time
 - Simple translation file format based on [TOML](https://toml.io/en/)
 - Multiple translation files, so you can split translations by feature, ..
 - Supports [ISO 639-1 (en, de)](https://en.wikipedia.org/wiki/ISO_639-1) and [RRC 5646 (en-US, en-GB, de-DE)](https://www.rfc-editor.org/rfc/rfc5646.html) translation identifiers
 
 ### Getting Started
 
-It's best to take a look at the [Sample Project](https://github.com/Voyonic-Systems/Echoes/tree/main/src/Echoes.SampleApp)
+It's best to take a look at the [Avalonia Sample Project](https://github.com/Voyonic-Systems/Echoes/tree/main/src/Echoes.SampleApp) or [MAUI Sample Project](https://github.com/Voyonic-Systems/Echoes/tree/main/src/Echoes.SampleApp.MAUI)
 
 Add references to the following packages:
 ```xml
 <PackageReference Include="Echoes" Version=".."/>
 <PackageReference Include="Echoes.Generator" Version=".."/>
+```
+
+For Avalonia XAML integration, add this reference:
+```xml
+<PackageReference Include="Echoes.Avalonia" Version=".."/>
+```
+
+For MAUI XAML integration, add this reference:
+```xml
+<PackageReference Include="Echoes.MAUI" Version=".."/>
 ```
 
 Specify translations files (Embedded Resources, Source Generator)
@@ -46,13 +56,14 @@ Specify translations files (Embedded Resources, Source Generator)
 
 
 ### Translation Files
-Translations are loaded from `.toml` files. The invariant file is **special** as it's structure included configuration data. 
-Language files are identified by `_{lang}.toml` postfix. 
+Translations are loaded from `.toml` files. The invariant file is **special** as its structure includes configuration data. 
+Language files are identified by `_{lang}.toml` or `_{lang-culture}.toml`  postfix. 
 
 ```
 Strings.toml
 Strings_de.toml
 Strings_es.toml
+Strings_de-AT.toml
 ```
 
 You can split translations in multiple toml files. 
