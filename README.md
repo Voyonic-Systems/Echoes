@@ -29,6 +29,8 @@ Add references to the following packages:
 ```xml
 <PackageReference Include="Echoes" Version=".."/>
 <PackageReference Include="Echoes.Generator" Version=".."/>
+
+<!-- For Avalonia Helpers -->
 <PackageReference Include="Echoes.Avalonia" Version=".."/>
 ```
 
