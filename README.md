@@ -2,7 +2,7 @@
   <img src="/img/icon.webp" width="100"/>
   <h1 align="center">Echoes</h1>
   <p align="center">
-    Simple type safe translations for Avalonia
+    Simple type safe translations for .NET
   </p>
 </p>
 
@@ -29,6 +29,7 @@ Add references to the following packages:
 ```xml
 <PackageReference Include="Echoes" Version=".."/>
 <PackageReference Include="Echoes.Generator" Version=".."/>
+<PackageReference Include="Echoes.Avalonia" Version=".."/>
 ```
 
 Specify translations files (Embedded Resources, Source Generator)
