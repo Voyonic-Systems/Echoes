@@ -5,31 +5,13 @@
         <Nullable>enable</Nullable>
 
         <!-- nuget package info -->
-        <Version>$(EchoesVersion)</Version>
-        <PackageVersion>$(EchoesVersion)</PackageVersion>
-        <Authors>Voyonic Systems GmbH</Authors>
-        <PackageIcon>icon.png</PackageIcon>
         <Product>Echoes</Product>
         <Title>Echoes</Title>
         <PackageId>Echoes</PackageId>
-        <Description>Simple type safe translations for .NET</Description>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/Voyonic-Systems/Echoes</PackageProjectUrl>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <AllowedOutputExtensionsInPackageBuildOutputFolder>
-            $(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb
-        </AllowedOutputExtensionsInPackageBuildOutputFolder>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
       <Compile Include="..\Shared\Tommy.cs" Link="Tommy.cs" />
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="..\..\img\icon.png" Pack="true" PackagePath="" />
-        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup>
