@@ -1,7 +1,7 @@
 <Project>
     <PropertyGroup>
         <AvaloniaVersion>11.*</AvaloniaVersion>
-        <EchoesVersion>0.2.0</EchoesVersion>
+        <EchoesVersion>0.3.0</EchoesVersion>
     </PropertyGroup>
 
     <!-- Shared across all Nuget Packages-->
