@@ -24,7 +24,10 @@ jobs:
       
     - name: Build for release
       run: dotnet build src/Echoes/Echoes.csproj -c Release
-      
+
+    - name: Build for release
+      run: dotnet build src/Echoes/Echoes.Avalonia.csproj -c Release
+
     - name: Build for release
       run: dotnet build src/Echoes.Generator/Echoes.Generator.csproj -c Release
       
