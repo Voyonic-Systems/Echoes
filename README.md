@@ -66,6 +66,7 @@ Language files are identified by `_{lang}.toml` or `_{lang-culture}.toml`  postf
 Strings.toml
 Strings_de.toml
 Strings_es.toml
+Strings_de-AT.toml
 ```
 
 You can split translations in multiple toml files. 
