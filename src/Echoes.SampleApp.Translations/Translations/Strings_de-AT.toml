@@ -1,2 +1,12 @@
-hello_world = 'Hallo Welt AT'
-greeting = 'Hallo {0}, wie geht es dir?'
+[echoes_config]
+generated_class_name = "Strings"
+generated_namespace = "Echoes.SampleApp.Translations"
+
+[translations]
+# Austrian-specific greeting
+welcome = "Servus bei Echoes!"
+
+# Only this one is defined in Austrian
+austrian_specific = "Servus! Dieser Text ist österreichisch"
+
+# Note: non-specified string like dialog.ok, dialog.cancel will fall back to de

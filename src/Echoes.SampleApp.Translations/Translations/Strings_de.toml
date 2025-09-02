@@ -1,2 +1,19 @@
-hello_world = 'Hallo Welt'
-greeting = 'Hallo {0}, wie geht es dir?'
+[echoes_config]
+generated_class_name = "Strings"
+generated_namespace = "Echoes.SampleApp.Translations"
+
+[translations]
+app_title = "Echoes Beispiel-App"
+welcome = "Willkommen bei Echoes!"
+greeting = "Hallo! Diese Demo zeigt verschachtelte Übersetzungen und Locale-Fallback."
+
+# Only in German, not in Austrian
+german_general = "Dieser Text hat eine deutsche Übersetzung, aber keine österreichische Variante"
+austrian_specific = "Dieser Text hat österreichische, deutsche und englische Versionen"
+
+dialog.ok = "OK"
+dialog.cancel = "Abbrechen"
+
+[menu.m_file]
+open = "Öffnen"
+save = "Speichern"
