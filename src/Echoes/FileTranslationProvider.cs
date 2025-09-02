@@ -71,7 +71,6 @@ public class FileTranslationProvider
     private static ImmutableDictionary<string, string>? ReadResource(Assembly assembly, string file)
     {
         var resourceNames = assembly.GetManifestResourceNames();
-
         var resourcePath =
             resourceNames
                 .FirstOrDefault(str => str.EndsWith(file.Replace("/", ".").Replace(@"\", "."), StringComparison.OrdinalIgnoreCase));
@@ -80,41 +79,61 @@ public class FileTranslationProvider
             return null;
 
         using var stream = assembly.GetManifestResourceStream(resourcePath);
-
         if (stream == null)
             return null;
 
         using var reader = new StreamReader(stream);
-
         var root = TOML.Parse(reader);
 
-        if (root.RawTable.TryGetValue("translations", out var translations))
-        {
-            var immutableDict = ImmutableDictionary.CreateBuilder<string, string>();
+        var immutableDict = ImmutableDictionary.CreateBuilder<string, string>();
 
-            foreach (var pair in translations.AsTable.RawTable)
+        // Process all sections except echoes_config
+        foreach (var section in root.RawTable)
+        {
+            if (section.Key == "echoes_config")
+                continue;
+
+            if (section.Value.IsTable)
             {
-                if (pair.Value.IsString)
+                // Special handling for [translations] - process directly at root level
+                if (section.Key == "translations")
                 {
-                    immutableDict.Add(pair.Key, pair.Value.AsString);
+                    ProcessTable(section.Value.AsTable, "", immutableDict);
+                }
+                else
+                {
+                    // Other sections become prefixed entries
+                    ProcessTable(section.Value.AsTable, section.Key, immutableDict);
                 }
             }
-
-            return immutableDict.ToImmutable();
+            else if (section.Value.IsString)
+            {
+                // Top-level string values (though this would be unusual)
+                immutableDict.Add(section.Key, section.Value.AsString);
+            }
         }
-        else
+
+        return immutableDict.ToImmutable();
+    }
+
+    private static void ProcessTable(TomlTable table, string prefix, ImmutableDictionary<string, string>.Builder builder)
+    {
+        foreach (var item in table.RawTable)
         {
-            var immutableDict = ImmutableDictionary.CreateBuilder<string, string>();
+            var key = item.Key;
+            var value = item.Value;
+            var fullPath = string.IsNullOrEmpty(prefix) ? key : $"{prefix}.{key}";
 
-            foreach (var pair in root.RawTable)
+            if (value.IsString)
             {
-                if (pair.Value.IsString)
-                {
-                    immutableDict.Add(pair.Key, pair.Value.AsString);
-                }
+                // Add the string value with its full dotted path as the key
+                builder.Add(fullPath, value.AsString);
             }
-
-            return immutableDict.ToImmutable();
+            else if (value.IsTable)
+            {
+                // Recursively process nested tables
+                ProcessTable(value.AsTable, fullPath, builder);
+            }
         }
     }
 }
