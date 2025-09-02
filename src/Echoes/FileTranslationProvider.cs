@@ -14,7 +14,7 @@ public class FileTranslationProvider
     private readonly Assembly _assembly;
 
     private readonly ImmutableDictionary<string, string> _invariantTranslations;
-    private (CultureInfo Culture, ImmutableDictionary<string, string> Lookup)? _translations;
+    private (CultureInfo Culture, ImmutableDictionary<string, string>? SpecificLookup, ImmutableDictionary<string, string>? LanguageLookup)? _translations;
 
     public FileTranslationProvider(Assembly assembly, string embeddedResourceKey)
     {
@@ -33,39 +33,59 @@ public class FileTranslationProvider
         if (culture == null)
             throw new ArgumentNullException(nameof(culture));
 
-        var lookup = _translations?.Lookup;
-        var lookupCulture = _translations?.Culture;
+        var cachedCulture = _translations?.Culture;
 
-        if (lookup == null || (!lookupCulture?.Equals(culture) ?? false))
+        // Check if we need to reload translations for a different culture
+        if (_translations == null || (!cachedCulture?.Equals(culture) ?? false))
         {
             var fileName = Path.GetFileNameWithoutExtension(_embeddedResourceKey);
-            var fullName = fileName + "_" + culture.Name + ".toml";
 
-            ImmutableDictionary<string, string>? resource = ReadResource(_assembly, fullName);
-            if (resource == null)
+            // Try to load the most specific culture file (e.g., de-AT)
+            ImmutableDictionary<string, string>? specificResource = null;
+            if (!string.IsNullOrEmpty(culture.Name))
             {
-                fullName = fileName + "_" + culture.TwoLetterISOLanguageName + ".toml";
-                resource = ReadResource(_assembly, fullName);
+                var specificFileName = $"{fileName}_{culture.Name}.toml";
+                specificResource = ReadResource(_assembly, specificFileName);
             }
-            var fullMatch = resource ?? ImmutableDictionary<string, string>.Empty;
-            _translations = (culture, fullMatch);
 
-            lookup = fullMatch;
+            // Try to load the language-only culture file (e.g., de)
+            ImmutableDictionary<string, string>? languageResource = null;
+            if (!string.IsNullOrEmpty(culture.TwoLetterISOLanguageName) &&
+                culture.TwoLetterISOLanguageName != culture.Name) // Only if different from specific
+            {
+                var languageFileName = $"{fileName}_{culture.TwoLetterISOLanguageName}.toml";
+                languageResource = ReadResource(_assembly, languageFileName);
+            }
+
+            // Store both lookups
+            _translations = (
+                culture,
+                specificResource,
+                languageResource
+            );
         }
 
-        if (lookup!.TryGetValue(key, out var result))
+        // Try to find the translation in order of specificity
+        // 1. Most specific locale (e.g., de-AT)
+        if (_translations?.SpecificLookup?.TryGetValue(key, out var specificResult) == true)
         {
-            return result;
+            return specificResult;
         }
-        else if (_invariantTranslations.TryGetValue(key, out var invariantResult))
+
+        // 2. Language-only locale (e.g., de)
+        if (_translations?.LanguageLookup?.TryGetValue(key, out var languageResult) == true)
+        {
+            return languageResult;
+        }
+
+        // 3. Invariant culture (fallback)
+        if (_invariantTranslations.TryGetValue(key, out var invariantResult))
         {
             return invariantResult;
         }
-        else
-        {
-            // NOTE: This should never happen!
-            return "TRANSLATION NOT FOUND: " + key;
-        }
+
+        // This should never happen
+        return "TRANSLATION NOT FOUND: " + key;
     }
 
     private static ImmutableDictionary<string, string>? ReadResource(Assembly assembly, string file)
@@ -134,6 +154,7 @@ public class FileTranslationProvider
                 // Recursively process nested tables
                 ProcessTable(value.AsTable, fullPath, builder);
             }
+            // Note: Arrays and other types are ignored for now
         }
     }
 }
