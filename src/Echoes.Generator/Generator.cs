@@ -1,62 +1,28 @@
+using Echoes.Common;
 using Microsoft.CodeAnalysis;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Tommy;
 
 namespace Echoes.Generator;
 
 [Generator]
 public class Generator : IIncrementalGenerator
 {
-    public record TranslationEntry
-    {
-        public string Key { get; }
-        public string FullPath { get; }
-
-        public TranslationEntry
-        (
-            string key,
-            string fullPath
-        )
-        {
-            Key = key;
-            FullPath = fullPath;
-        }
-    }
-
-    public record TranslationGroup
-    {
-        public string Name { get; }
-        public Dictionary<string, TranslationEntry> Entries { get; }
-        public Dictionary<string, TranslationGroup> SubGroups { get; }
-
-        public TranslationGroup
-        (
-            string name
-        )
-        {
-            Name = name;
-            Entries = new Dictionary<string, TranslationEntry>();
-            SubGroups = new Dictionary<string, TranslationGroup>();
-        }
-    }
-
-    public record InvariantLanguageFile
+    private record InvariantLanguageFile
     {
         public string ProjectRelativeTomlFilePath { get; }
         public string GeneratorNamespace { get; }
         public string GeneratorClassName { get; }
-        public TranslationGroup RootGroup { get; }
+        public TomlTranslationParser.TranslationGroup RootGroup { get; }
 
         public InvariantLanguageFile
         (
             string projectRelativeTomlFilePath,
             string generatorNamespace,
             string generatorClassName,
-            TranslationGroup rootGroup
+            TomlTranslationParser.TranslationGroup rootGroup
         )
         {
             ProjectRelativeTomlFilePath = projectRelativeTomlFilePath;
@@ -68,9 +34,6 @@ public class Generator : IIncrementalGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        // This will provide all additional files as input to your pipeline
-        var additionalFiles = context.AdditionalTextsProvider;
-
         IncrementalValueProvider<string> projectDirProvider = context.AnalyzerConfigOptionsProvider
            .Select((provider, cancellationToken) =>
            {
@@ -79,7 +42,7 @@ public class Generator : IIncrementalGenerator
                return projectDir ?? string.Empty;
            });
 
-        IncrementalValuesProvider<AdditionalText> translationFiles = context.AdditionalTextsProvider.Where(text => IsFileRelevant(text));
+        IncrementalValuesProvider<AdditionalText> translationFiles = context.AdditionalTextsProvider.Where(IsFileRelevant);
 
         var combinedProvider = translationFiles.Combine(projectDirProvider);
 
@@ -115,121 +78,30 @@ public class Generator : IIncrementalGenerator
 
         var stringText = text.ToString();
 
-        return stringText.Contains("[echoes_config]");
+        return stringText.Contains($"[{TomlTranslationParser.ConfigSectionName}]");
     }
 
     private static InvariantLanguageFile? ParseTomlFiles(AdditionalText translationFile, string projectDir)
     {
         var text = translationFile.GetText()?.ToString() ?? string.Empty;
-        var reader = new StringReader(text);
-        var parser = new TOMLParser(reader);
-        var root = parser.Parse();
 
-        if (!root.RawTable.TryGetValue("echoes_config", out var echoesConfig))
+        var config = TomlTranslationParser.ParseConfig(text);
+        if (config == null)
             return null;
-
-        if (!echoesConfig.IsTable)
-            return null;
-
-        if (!echoesConfig.AsTable.RawTable.TryGetValue("generated_class_name", out var generatedClassName))
-            return null;
-
-        if (!generatedClassName.IsString)
-            return null;
-
-        if (!echoesConfig.AsTable.RawTable.TryGetValue("generated_namespace", out var generatedNamespace))
-            return null;
-
-        if (!generatedNamespace.IsString)
-            return null;
-
-        var sourceFile = translationFile.Path;
-        var trimmedSourceFile = sourceFile;
-
-        if (sourceFile.StartsWith(projectDir))
-        {
-            trimmedSourceFile = sourceFile.Substring(projectDir.Length);
-        }
 
         // Build the nested structure
-        var rootGroup = BuildTranslationStructure(root);
+        var rootGroup = TomlTranslationParser.BuildTranslationStructure(text);
+
+        var trimmedSourceFile = translationFile.Path.StartsWith(projectDir)
+            ? translationFile.Path.Substring(projectDir.Length)
+            : translationFile.Path;
 
         return new InvariantLanguageFile(
             trimmedSourceFile,
-            generatedNamespace.AsString,
-            generatedClassName.AsString,
+            config.GeneratedNamespace,
+            config.GeneratedClassName,
             rootGroup
         );
-    }
-
-    private static TranslationGroup BuildTranslationStructure(TomlTable root)
-    {
-        var rootGroup = new TranslationGroup("");
-
-        // Process all sections except echoes_config
-        foreach (var section in root.RawTable.Where(kvp => kvp.Key != "echoes_config"))
-        {
-            var sectionKey = section.Key;
-            var sectionContent = section.Value;
-
-            if (sectionContent.IsTable)
-            {
-                // Special handling for [translations] - put entries directly in root
-                if (sectionKey == "translations")
-                {
-                    ProcessSection(sectionContent.AsTable, "", rootGroup);
-                }
-                else
-                {
-                    // Other sections become nested classes
-                    ProcessSection(sectionContent.AsTable, sectionKey, rootGroup);
-                }
-            }
-        }
-        return rootGroup;
-    }
-
-    private static void ProcessSection(TomlTable table, string prefix, TranslationGroup rootGroup)
-    {
-        foreach (var item in table.RawTable)
-        {
-            var key = item.Key;
-            var content = item.Value;
-            var fullPath = string.IsNullOrEmpty(prefix) ? key : $"{prefix}.{key}";
-
-            if (content.IsString)
-            {   
-                AddTranslationEntry(fullPath, rootGroup);
-            }
-            else if (content.IsTable)
-            {
-                // Recursively process nested tables
-                ProcessSection(content.AsTable, fullPath, rootGroup);
-            }
-        }
-    }
-
-    private static void AddTranslationEntry(string fullPath, TranslationGroup rootGroup)
-    {
-        var parts = fullPath.Split('.');
-        var currentGroup = rootGroup;
-
-        // Navigate/create the group hierarchy
-        for (int i = 0; i < parts.Length - 1; i++)
-        {
-            var groupName = parts[i];
-
-            if (!currentGroup.SubGroups.ContainsKey(groupName))
-            {
-                currentGroup.SubGroups[groupName] = new TranslationGroup(groupName);
-            }
-
-            currentGroup = currentGroup.SubGroups[groupName];
-        }
-
-        // Add the entry to the final group
-        var entryKey = parts[parts.Length - 1];
-        currentGroup.Entries[entryKey] = new TranslationEntry(entryKey, fullPath);
     }
 
     private static string GenerateKeysFileText(AdditionalText translationFile, string projectDir)
@@ -262,7 +134,7 @@ public class Generator : IIncrementalGenerator
         return sb.ToString();
     }
 
-    private static void GenerateGroupContent(StringBuilder sb, TranslationGroup group, int indentLevel)
+    private static void GenerateGroupContent(StringBuilder sb, TomlTranslationParser.TranslationGroup group, int indentLevel)
     {
         var indent = new string('\t', indentLevel);
 

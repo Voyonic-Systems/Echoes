@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <Compile Include="..\Shared\Tommy.cs" Link="Tommy.cs" />
+      <Compile Include="..\Shared\TomlTranslationParser.cs" Link="TomlTranslationParser.cs" />
     </ItemGroup>
 
     <ItemGroup>

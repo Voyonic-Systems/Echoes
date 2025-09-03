@@ -1,10 +1,10 @@
+using Echoes.Common;
 using System;
 using System.Collections.Immutable;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Tommy;
 
 namespace Echoes;
 
@@ -103,58 +103,9 @@ public class FileTranslationProvider
             return null;
 
         using var reader = new StreamReader(stream);
-        var root = TOML.Parse(reader);
+        var tomlContent = reader.ReadToEnd();
 
-        var immutableDict = ImmutableDictionary.CreateBuilder<string, string>();
-
-        // Process all sections except echoes_config
-        foreach (var section in root.RawTable)
-        {
-            if (section.Key == "echoes_config")
-                continue;
-
-            if (section.Value.IsTable)
-            {
-                // Special handling for [translations] - process directly at root level
-                if (section.Key == "translations")
-                {
-                    ProcessTable(section.Value.AsTable, "", immutableDict);
-                }
-                else
-                {
-                    // Other sections become prefixed entries
-                    ProcessTable(section.Value.AsTable, section.Key, immutableDict);
-                }
-            }
-            else if (section.Value.IsString)
-            {
-                // Top-level string values (though this would be unusual)
-                immutableDict.Add(section.Key, section.Value.AsString);
-            }
-        }
-
-        return immutableDict.ToImmutable();
-    }
-
-    private static void ProcessTable(TomlTable table, string prefix, ImmutableDictionary<string, string>.Builder builder)
-    {
-        foreach (var item in table.RawTable)
-        {
-            var key = item.Key;
-            var value = item.Value;
-            var fullPath = string.IsNullOrEmpty(prefix) ? key : $"{prefix}.{key}";
-
-            if (value.IsString)
-            {
-                // Add the string value with its full dotted path as the key
-                builder.Add(fullPath, value.AsString);
-            }
-            else if (value.IsTable)
-            {
-                // Recursively process nested tables
-                ProcessTable(value.AsTable, fullPath, builder);
-            }
-            // Note: Arrays and other types are ignored for now
-        }
+        // Use the shared parser to get translations as a flat dictionary
+        return TomlTranslationParser.ParseTranslations(tomlContent);
     }
 }

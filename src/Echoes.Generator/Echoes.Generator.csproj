@@ -30,6 +30,7 @@
 
     <ItemGroup>
       <Compile Include="..\Shared\Tommy.cs" Link="Tommy.cs" />
+      <Compile Include="..\Shared\TomlTranslationParser.cs" Link="TomlTranslationParser.cs" />
     </ItemGroup>
     <ItemGroup>
         <!-- Package the generator in the analyzer directory of the nuget package -->
