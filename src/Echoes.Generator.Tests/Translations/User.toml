@@ -1,7 +1,0 @@
-[echoes_config]
-generated_class_name = "User"
-generated_namespace = "Echoes.Generator.Tests.Translations"
-
-[translations]
-hello_world = 'Hello World'
-greeting = 'Hello {0}, how are you?'

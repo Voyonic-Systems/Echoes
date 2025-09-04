@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -13,7 +13,7 @@
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.XUnit" Version="1.1.2" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
         <PackageReference Include="xunit" Version="2.9.3" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="3.1.1">
+        <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
@@ -22,17 +22,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Echoes.Generator\Echoes.Generator.csproj" />
+        <ProjectReference Include="..\Echoes\Echoes.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Include="**\*.toml" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <AdditionalFiles Include="Translations\User.toml" />
-        <AdditionalFiles Include="Translations\Customer.toml" />
-        <AdditionalFiles Include="Translations\Document.toml" />
-    </ItemGroup>
-
 
 </Project>

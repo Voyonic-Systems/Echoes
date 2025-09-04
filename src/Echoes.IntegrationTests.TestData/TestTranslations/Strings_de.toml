@@ -1,4 +1,4 @@
-app_title = "Echoes Beispiel-App"
+﻿app_title = "Echoes Beispiel-App"
 welcome = "Willkommen bei Echoes!"
 greeting = "Hallo! Diese Demo zeigt verschachtelte Übersetzungen und Locale-Fallback."
 
