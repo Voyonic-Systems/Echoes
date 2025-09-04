@@ -9,32 +9,15 @@ namespace Echoes.Generator.Tests.Utils
 {
     internal static class GeneratorTestHost
     {
-        // Minimal stub so generated code compiles in tests
-        private const string TranslationUnitStub = @"
-        namespace Echoes
-        {
-            using System.Reflection;
-            public sealed class TranslationUnit
-            {
-                public TranslationUnit(Assembly assembly, string file, string key) { }
-            }
-        }";
-
         public static (Compilation Compilation, IReadOnlyDictionary<string, string> Files)
-        RunMany(IEnumerable<AdditionalText> additionalTexts, Generator generator, bool includeTranslationUnitStub = true)
+        RunMany(IEnumerable<AdditionalText> additionalTexts, Generator generator)
         {
             var parseOptions = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.Latest);
 
             // Framework references (System.*, netstandard, etc.)
             var references = GetFrameworkReferences().ToList();
 
-            // Start compilation with the stub (so generated code can reference Echoes.TranslationUnit)
             var syntaxTrees = new List<SyntaxTree>();
-            if (includeTranslationUnitStub)
-            {
-                syntaxTrees.Add(CSharpSyntaxTree.ParseText(TranslationUnitStub, parseOptions));
-            }
-
             var compilation = CSharpCompilation.Create(
                 assemblyName: "Tests",
                 syntaxTrees: syntaxTrees,
