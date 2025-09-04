@@ -1,7 +1,3 @@
-generated_class_name = "Strings"
-generated_namespace = "Echoes.SampleApp.Translations"
-
-[translations]
 app_title = "Echoes 示例应用程序"
 welcome = "欢迎使用 Echoes！"
 greeting = "你好！本示例展示了嵌套翻译与区域设置回退机制。"
