@@ -1,0 +1,23 @@
+﻿[echoes_config]
+generated_namespace = "Echoes.IntegrationTests.TestTranslations"
+generated_class_name = "TestStrings"
+
+[translations]
+app_title = "Echoes Sample App"
+welcome = "Welcome to Echoes!"
+greeting = "Hello! This demo shows nested translations and locale fallback."
+
+# For fallback demonstration
+invariant_only = "This text only exists in English"
+german_general = "This text has German translation but no Austrian variant"
+austrian_specific = "This text has Austrian, German, and English versions"
+
+# Nested structure - using dotted keys
+dialog.ok = "OK"
+dialog.cancel = "Cancel"
+
+# Nested structure - using tables
+# Note it can't be called 'file' as that's a reserved keyword
+[menu.m_file]
+open = "Open"
+save = "Save"
