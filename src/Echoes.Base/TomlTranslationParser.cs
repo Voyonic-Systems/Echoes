@@ -72,8 +72,8 @@ public static class TomlTranslationParser
 
         ProcessTomlRoot
         (
-            tomlContent, 
-            (path, value) => builder.Add(path, value), 
+            tomlContent,
+            (path, value) => builder.Add(path, value),
             null
         );
 
@@ -164,7 +164,7 @@ public static class TomlTranslationParser
                 }
             }
             else if (sectionContent.IsString)
-            {                              
+            {
                 flatHandler?.Invoke(sectionKey, sectionContent.AsString);
 
                 if (rootGroup != null)

@@ -11,12 +11,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Include="..\Shared\Tommy.cs" Link="Tommy.cs" />
-      <Compile Include="..\Shared\TomlTranslationParser.cs" Link="TomlTranslationParser.cs" />
+      <PackageReference Include="System.Reactive" Version="6.0.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="System.Reactive" Version="6.0.1" />
+      <ProjectReference Include="..\Echoes.Base\Echoes.Base.csproj" />
     </ItemGroup>
 
 </Project>

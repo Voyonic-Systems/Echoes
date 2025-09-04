@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
@@ -27,11 +27,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Do not include the generator as a lib dependency -->
     </PropertyGroup>
-
-    <ItemGroup>
-      <Compile Include="..\Shared\Tommy.cs" Link="Tommy.cs" />
-      <Compile Include="..\Shared\TomlTranslationParser.cs" Link="TomlTranslationParser.cs" />
-    </ItemGroup>
+  
     <ItemGroup>
         <!-- Package the generator in the analyzer directory of the nuget package -->
         <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
@@ -44,6 +40,9 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.0" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Echoes.Base\Echoes.Base.csproj" OutputItemType="Analyzer"/>
     </ItemGroup>
 
 
