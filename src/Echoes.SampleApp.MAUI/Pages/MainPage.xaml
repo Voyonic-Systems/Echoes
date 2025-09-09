@@ -10,7 +10,7 @@
              x:DataType="pageModels:MainPageModel"
              >
     <StackLayout>
-        <Label Text="{echoes:Translate {x:Static translations:Strings.hello_world}}" VerticalOptions="Center"/>
+        <Label Text="{echoes:Translate {x:Static translations:Strings.welcome}}" VerticalOptions="Center"/>
         <Button Text="English" Command="{Binding SetCulture}" CommandParameter="english" />
         <Button Text="German" Command="{Binding SetCulture}" CommandParameter="german" />
         <Button Text="Chinese" Command="{Binding SetCulture}" CommandParameter="chinese" />

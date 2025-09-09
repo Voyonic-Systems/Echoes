@@ -26,8 +26,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Echoes.MAUI", "Echoes.MAUI\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Echoes.SampleApp.MAUI", "Echoes.SampleApp.MAUI\Echoes.SampleApp.MAUI.csproj", "{73220C22-676E-42A9-A195-29911FF4BBFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MauiTest", "MauiTest\MauiTest.csproj", "{455D315B-5337-442D-8A8F-34C527B6A784}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Echoes.Base", "Echoes.Base\Echoes.Base.csproj", "{7D7E65B8-D7BC-48EF-B6B9-E665134E4E77}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Echoes.IntegrationTests", "Echoes.IntegrationTests\Echoes.IntegrationTests.csproj", "{228D2B59-2A21-4679-82C5-DA921154DFD5}"
@@ -76,10 +74,6 @@ Global
 		{73220C22-676E-42A9-A195-29911FF4BBFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73220C22-676E-42A9-A195-29911FF4BBFA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{73220C22-676E-42A9-A195-29911FF4BBFA}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{455D315B-5337-442D-8A8F-34C527B6A784}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{455D315B-5337-442D-8A8F-34C527B6A784}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{455D315B-5337-442D-8A8F-34C527B6A784}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{455D315B-5337-442D-8A8F-34C527B6A784}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7D7E65B8-D7BC-48EF-B6B9-E665134E4E77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7D7E65B8-D7BC-48EF-B6B9-E665134E4E77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D7E65B8-D7BC-48EF-B6B9-E665134E4E77}.Release|Any CPU.ActiveCfg = Release|Any CPU
