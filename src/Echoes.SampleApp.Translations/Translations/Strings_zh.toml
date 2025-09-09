@@ -1,1 +1,14 @@
-hello_world = '世界您好'
+app_title = "Echoes 示例应用程序"
+welcome = "欢迎使用 Echoes！"
+greeting = "你好！本示例展示了嵌套翻译与区域设置回退机制。"
+
+austrian_specific = "此文本有奥地利、德语和英语版本"
+german_general = "此文本有德语翻译，但没有奥地利变体"
+invariant_only = "此文本仅存在英文版本"
+
+dialog.ok = "确定"
+dialog.cancel = "取消"
+
+[menu.m_file]
+open = "打开"
+save = "保存"

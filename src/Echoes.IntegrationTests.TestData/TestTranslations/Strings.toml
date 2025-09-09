@@ -1,6 +1,6 @@
-[echoes_config]
-generated_class_name = "Strings"
-generated_namespace = "Echoes.SampleApp.Translations"
+﻿[echoes_config]
+generated_namespace = "Echoes.IntegrationTests.TestTranslations"
+generated_class_name = "TestStrings"
 
 [translations]
 app_title = "Echoes Sample App"

@@ -1,47 +1,79 @@
-<Window xmlns="https://github.com/avaloniaui"
+﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:echoes="clr-namespace:Echoes;assembly=Echoes.Avalonia"
         xmlns:sampleApp="clr-namespace:Echoes.SampleApp"
         xmlns:translations="clr-namespace:Echoes.SampleApp.Translations;assembly=Echoes.SampleApp.Translations"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" Width="800" Height="400"
         x:Class="Echoes.SampleApp.MainWindow"
         x:DataType="sampleApp:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="Echoes.SampleApp">
+        Title="{echoes:Translate {x:Static translations:Strings.app_title}}">
+  <Window.Styles>
+    <Style Selector="Button">
+      <Setter Property="MinWidth" Value="100"/>
+      <Setter Property="HorizontalAlignment" Value="Center"/>
+      <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    </Style>
+    <Style Selector="StackPanel">
+      <Setter Property="Spacing" Value="10"/>
+    </Style>
+  </Window.Styles>
 
-    <DockPanel>
-        <UniformGrid DockPanel.Dock="Bottom" Columns="3" Rows="1">
-            <Button Command="{Binding SetCultureCommand}" CommandParameter="english">
-                English
-            </Button>
-            <Button Command="{Binding SetCultureCommand}" CommandParameter="german">
-                German
-            </Button>
-            <Button Command="{Binding SetCultureCommand}" CommandParameter="chinese">
-                Chinese
-            </Button>
-        </UniformGrid>
+  <DockPanel Margin="10">
+    <UniformGrid DockPanel.Dock="Bottom"
+                 Columns="4">
+      <Button Command="{Binding SetCultureCommand}"
+              CommandParameter="en"
+              Content="en"/>
+      <Button Command="{Binding SetCultureCommand}"
+              CommandParameter="de"
+              Content="de"/>
+      <Button Command="{Binding SetCultureCommand}"
+              CommandParameter="de-AT"
+              Content="de-AT"/>
+      <Button Command="{Binding SetCultureCommand}"
+              CommandParameter="zh"
+              Content="zh"/>
+    </UniformGrid>
+    <TextBlock Text="{Binding CurrentCulture, StringFormat='Current Culture: {0}'}"
+               DockPanel.Dock="Bottom"
+               FontStyle="Italic"/>
+    
+    <StackPanel>
+      <TextBlock Text="{echoes:Translate {x:Static translations:Strings.welcome}}"
+                   FontSize="20"
+                   FontWeight="Bold"/>
+      
+      <TextBlock Text="{echoes:Translate {x:Static translations:Strings.greeting}}"
+                 FontSize="16"/>
 
-        <DockPanel
-            DockPanel.Dock="Top">
+      <TextBlock Text="Nested Translation Examples:"
+                   FontWeight="Bold"/>
 
-            <TextBlock
-                Text="{echoes:Translate {x:Static translations:Strings.greeting}}"/>
+      <StackPanel Orientation="Horizontal">
+        <Button Content="{echoes:Translate {x:Static translations:Strings+dialog.ok}}"/>
+        <Button Content="{echoes:Translate {x:Static translations:Strings+dialog.cancel}}"/>
+      </StackPanel>
 
-            <TextBox
-                Text="{Binding Name}"/>
+      <StackPanel Orientation="Horizontal">
+        <Button Content="{echoes:Translate {x:Static translations:Strings+menu+m_file.open}}"/>
+        <Button Content="{echoes:Translate {x:Static translations:Strings+menu+m_file.save}}"/>
+      </StackPanel>
 
-        </DockPanel>
+      <TextBlock Text="Fallback Chain Demo (de-AT → de → invariant):"
+                 FontWeight="Bold"/>
 
-        <ContentControl
-            DockPanel.Dock="Top"
-            HorizontalContentAlignment="Center"
-            VerticalContentAlignment="Center">
-            <TextBlock
-                FontSize="64"
-                Text="{echoes:Translate {x:Static translations:Strings.hello_world}}"/>
-        </ContentControl>
-    </DockPanel>
+      <TextBlock Text="{echoes:Translate {x:Static translations:Strings.austrian_specific}}"
+                 FontStyle="Italic"/>
+
+      <TextBlock Text="{echoes:Translate {x:Static translations:Strings.german_general}}"
+                 FontStyle="Italic"/>
+
+      <TextBlock Text="{echoes:Translate {x:Static translations:Strings.invariant_only}}"
+                 FontStyle="Italic"/>
+
+    </StackPanel>
+  </DockPanel>
 </Window>

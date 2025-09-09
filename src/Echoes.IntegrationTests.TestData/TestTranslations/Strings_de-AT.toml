@@ -1,0 +1,6 @@
+﻿[translations]
+# Austrian-specific greeting
+welcome = "Servus bei Echoes!"
+
+# Only this one is defined in Austrian
+austrian_specific = "Servus! Dieser Text ist österreichisch"
