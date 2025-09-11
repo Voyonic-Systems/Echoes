@@ -15,8 +15,10 @@
 - Translation keys are generated at compile time. Missing keys (from the invariant) will show up as compiler errors.
 - [Markup extension](https://docs.avaloniaui.net/docs/concepts/markupextensions) for simple usage
 - Simple translation file format based on [TOML](https://toml.io/en/)
-- Multiple translation files, so you can split translations by feature, ..
+- Multiple translation files, so you can split translations by feature or module
+- Inside each file, translations can be grouped and nested using *dotted key syntax* or *group/table syntax*, providing a clean, hierarchical structure within a single file
 - Supports [ISO 639-1 (en, de)](https://en.wikipedia.org/wiki/ISO_639-1) and [RRC 5646 (en-US, en-GB, de-DE)](https://www.rfc-editor.org/rfc/rfc5646.html) translation identifiers
+- Built-in automatic fallback: if a key is missing in a specific locale (e.g., `de-AT`), it will automatically fall back to a language-only locale (e.g., `de`), and then to the invariant file if still not found
 - Autocomplete of translation keys
   <img width="952" height="151" alt="Screenshot 2025-08-05 at 10 03 21" src="https://github.com/user-attachments/assets/98d8aa66-50bc-4778-928d-b93d1da579ae" />
 
@@ -52,12 +54,13 @@ Specify translations files (Embedded Resources, Source Generator)
 
 
 ### Translation Files
-Translations are loaded from `.toml` files. The invariant file is **special** as it's structure included configuration data. 
-Language files are identified by `_{lang}.toml` postfix. 
+Translations are loaded from `.toml` files. The invariant file is **special** as it defines structure and configuration.
+Additional language files are identified by `_{lang}.toml` postfix. 
 
 ```
 Strings.toml
 Strings_de.toml
+Strings_de-AT.toml
 Strings_es.toml
 ```
 
@@ -83,13 +86,57 @@ generated_namespace = "Echoes.SampleApp.Translations"
 [translations]
 hello_world = 'Hello World'
 greeting = 'Hello {0}, how are you?'
+
+# Nested via dotted keys
+dialog.ok     = "OK"
+dialog.cancel = "Cancel"
+
+# Nested via tables
+[settings.display]
+brightness = "Brightness"
+contrast   = "Contrast"
 ```
 
 #### Example: Strings_de.toml
 ```toml
 hello_world = 'Hallo Welt'
 greeting = 'Hallo {0}, wie geht es dir?'
+
+dialog.ok     = "OK"
+dialog.cancel = "Abbrechen"
+
+[settings.display]
+brightness = "Helligkeit"
+contrast   = "Kontrast"
 ```
+
+### XAML Usage
+
+#### Namespaces
+Add namespaces for the generated translations and the helper markup extension:
+
+```xml
+<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:translations="clr-namespace:Your.Namespace;assembly=Your.Assembly"
+    xmlns:echoes="clr-namespace:Echoes.Avalonia;assembly=Echoes.Avalonia">
+```
+
+#### Referencing keys (using the **Echoes Avalonia** markup extension)
+
+**Top-level entry (offers IntelliSense):**
+```xml
+<TextBlock Text="{echoes:Translate {x:Static translations:Strings.hello_world}}" />
+```
+
+**Nested entry (after `+` IntelliSense is currently limited by XAML tooling):**
+```xml
+<TextBlock Text="{echoes:Translate {x:Static translations:Strings+settings+display.brightness}}" />
+<Button Content="{echoes:Translate {x:Static translations:Strings+dialog.ok}}" />
+```
+
+When the culture is changed at runtime, all bound `Translate` values automatically update without needing to reload views.
 
 ### Is this library stable?
 No, it's currently in preview. See the version number.
