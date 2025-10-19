@@ -208,9 +208,9 @@ namespace Echoes.IntegrationTests
             FileTranslationProvider.LookForFilesOnDisk = true;
             FileTranslationProvider.FilesLocation = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "TestTranslations");
             IList<string> fileNames = FileTranslationProvider.ListTranslationFiles(null, "strings");
-            Assert.False(string.IsNullOrEmpty(fileNames.First(s => s.Contains("strings_de-AT.toml", StringComparison.OrdinalIgnoreCase))));
-            Assert.False(string.IsNullOrEmpty(fileNames.First(s => s.Contains("strings_de.toml", StringComparison.OrdinalIgnoreCase))));
-            Assert.False(string.IsNullOrEmpty(fileNames.First(s => s.Contains("strings_sk.toml", StringComparison.OrdinalIgnoreCase))));
+            Assert.False(string.IsNullOrEmpty(fileNames.FirstOrDefault(s => s.Contains("strings_de-AT.toml", StringComparison.OrdinalIgnoreCase))));
+            Assert.False(string.IsNullOrEmpty(fileNames.FirstOrDefault(s => s.Contains("strings_de.toml", StringComparison.OrdinalIgnoreCase))));
+            Assert.False(string.IsNullOrEmpty(fileNames.FirstOrDefault(s => s.Contains("strings_sk.toml", StringComparison.OrdinalIgnoreCase))));
         }
 
         [Fact]
@@ -218,10 +218,10 @@ namespace Echoes.IntegrationTests
         {
             FileTranslationProvider.LookForFilesOnDisk = false;
             IList<string> fileNames = FileTranslationProvider.ListTranslationFiles(typeof(TestTranslations.TestStrings).Assembly, "strings");
-            Assert.False(string.IsNullOrEmpty(fileNames.First(s => s.Contains("strings_de-AT.toml", StringComparison.OrdinalIgnoreCase))));
-            Assert.False(string.IsNullOrEmpty(fileNames.First(s => s.Contains("strings_de.toml", StringComparison.OrdinalIgnoreCase))));
+            Assert.False(string.IsNullOrEmpty(fileNames.FirstOrDefault(s => s.Contains("strings_de-AT.toml", StringComparison.OrdinalIgnoreCase))));
+            Assert.False(string.IsNullOrEmpty(fileNames.FirstOrDefault(s => s.Contains("strings_de.toml", StringComparison.OrdinalIgnoreCase))));
             // Slovak file is only copied and should not get into resources
-            Assert.True(string.IsNullOrEmpty(fileNames.First(s => s.Contains("strings_sk.toml", StringComparison.OrdinalIgnoreCase))));
+            Assert.True(string.IsNullOrEmpty(fileNames.FirstOrDefault(s => s.Contains("strings_sk.toml", StringComparison.OrdinalIgnoreCase))));
         }
 
         [Fact]
