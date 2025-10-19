@@ -1,0 +1,3 @@
+﻿# This file is used in the Translation_Is_Updated_From_File test
+
+greeting = "Servus! Diese Demo zeigt verschachtelte Übersetzungen und Locale-Fallback."

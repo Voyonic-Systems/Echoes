@@ -1,0 +1,10 @@
+﻿app_title = "Echoes appka-Príklad"
+welcome = "Vítajte v Echoes!"
+greeting = "Dobrý deň! Tento príklad ukazuje vložené preklady a užívanie záložných miestnych nastavení."
+
+dialog.ok = "OK"
+dialog.cancel = "Zrušiť"
+
+[menu.m_file]
+open = "Otvoriť"
+save = "Uložiť"
