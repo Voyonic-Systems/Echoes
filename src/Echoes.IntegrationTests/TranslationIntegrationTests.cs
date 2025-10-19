@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Reflection;
-using Xunit;
+
 using Echoes;
+
+using Xunit;
 
 namespace Echoes.IntegrationTests
 {
@@ -26,7 +32,7 @@ namespace Echoes.IntegrationTests
         {
             TranslationProvider.SetCulture(new CultureInfo("en"));
 
-            var title = TestTranslations.TestStrings.app_title.CurrentValue;            
+            var title = TestTranslations.TestStrings.app_title.CurrentValue;
             Assert.Equal("Echoes Sample App", title);
         }
 
@@ -194,6 +200,66 @@ namespace Echoes.IntegrationTests
             var saveProp = fileType.GetProperty("save", BindingFlags.Public | BindingFlags.Static);
             Assert.NotNull(saveProp);
             Assert.Equal(typeof(TranslationUnit), saveProp.PropertyType);
+        }
+
+        [Fact]
+        public void Files_Are_Enumerated_On_Disk()
+        {
+            FileTranslationProvider.LookForFilesOnDisk = true;
+            FileTranslationProvider.FilesLocation = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "TestTranslations");
+            IList<string> fileNames = FileTranslationProvider.ListTranslationFiles(null, "strings");
+            Assert.False(string.IsNullOrEmpty(fileNames.FirstOrDefault(s => s.Contains("strings_de-AT.toml", StringComparison.OrdinalIgnoreCase))));
+            Assert.False(string.IsNullOrEmpty(fileNames.FirstOrDefault(s => s.Contains("strings_de.toml", StringComparison.OrdinalIgnoreCase))));
+            Assert.False(string.IsNullOrEmpty(fileNames.FirstOrDefault(s => s.Contains("strings_sk.toml", StringComparison.OrdinalIgnoreCase))));
+        }
+
+        [Fact]
+        public void Files_Are_Enumerated_In_Resources()
+        {
+            FileTranslationProvider.LookForFilesOnDisk = false;
+            IList<string> fileNames = FileTranslationProvider.ListTranslationFiles(typeof(TestTranslations.TestStrings).Assembly, "strings");
+            Assert.False(string.IsNullOrEmpty(fileNames.FirstOrDefault(s => s.Contains("strings_de-AT.toml", StringComparison.OrdinalIgnoreCase))));
+            Assert.False(string.IsNullOrEmpty(fileNames.FirstOrDefault(s => s.Contains("strings_de.toml", StringComparison.OrdinalIgnoreCase))));
+            // Slovak file is only copied and should not get into resources
+            Assert.True(string.IsNullOrEmpty(fileNames.FirstOrDefault(s => s.Contains("strings_sk.toml", StringComparison.OrdinalIgnoreCase))));
+        }
+
+        [Fact]
+        public void CultureInfos_Are_Enumerated()
+        {
+            FileTranslationProvider.LookForFilesOnDisk = true;
+            FileTranslationProvider.FilesLocation = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "TestTranslations");
+            IList<string> fileNames = FileTranslationProvider.ListTranslationFiles(null, "strings");
+            IList<CultureInfo> cultureInfos = FileTranslationProvider.ListCultures(fileNames);
+            Assert.NotNull(cultureInfos.FirstOrDefault(c => c.Name.Equals("de-AT", StringComparison.OrdinalIgnoreCase)));
+            Assert.NotNull(cultureInfos.FirstOrDefault(c => c.Name.Equals("de-DE", StringComparison.OrdinalIgnoreCase)));
+            Assert.NotNull(cultureInfos.FirstOrDefault(c => c.Name.Equals("sk-SK", StringComparison.OrdinalIgnoreCase)));
+        }
+
+        [Fact]
+        public void Culture_Is_Loaded_From_File()
+        {
+            FileTranslationProvider.LookForFilesOnDisk = true;
+            FileTranslationProvider.FilesLocation = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "TestTranslations");
+
+            var unit = TestTranslations.TestStrings.app_title;
+
+            TranslationProvider.SetCulture(new CultureInfo("sk"));
+            var slovakValue = unit.CurrentValue;
+            Assert.Equal("Echoes appka-Príklad", slovakValue);
+        }
+
+        [Fact]
+        public void Translation_Is_Updated_From_File()
+        {
+            FileTranslationProvider.LookForFilesOnDisk = true;
+            FileTranslationProvider.FilesLocation = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, @"..\..\..");
+
+            var unit = TestTranslations.TestStrings.greeting;
+
+            TranslationProvider.SetCulture(new CultureInfo("de"));
+            var germanValue = unit.CurrentValue;
+            Assert.StartsWith("Servus!", germanValue);
         }
     }
 }

@@ -21,7 +21,8 @@
 - Built-in automatic fallback: if a key is missing in a specific locale (e.g., `de-AT`), it will automatically fall back to a language-only locale (e.g., `de`), and then to the invariant file if still not found
 - Autocomplete of translation keys
   <img width="952" height="151" alt="Screenshot 2025-08-05 at 10 03 21" src="https://github.com/user-attachments/assets/98d8aa66-50bc-4778-928d-b93d1da579ae" />
-
+- Possibility to load translations from a disk file (useful for translators to verify their work)
+- The method to enumerate language files (both from resources or from the disk) and obtain CultureInfo of the enumerated files
 
 ### Getting Started
 
@@ -109,6 +110,25 @@ dialog.cancel = "Abbrechen"
 brightness = "Helligkeit"
 contrast   = "Kontrast"
 ```
+
+#### Loading of files from the disk
+To enable loading of translations from the disk, set the *FileTranslationProvider.LookForFilesOnDisk* property to true. 
+The files are looked for in the executing assembly's directory. To specify a different directory, set the *FileTranslationProvider.FilesLocation* to the necessary directory name.
+
+Example:
+
+```
+FileTranslationProvider.LookForFilesOnDisk = true;
+FileTranslationProvider.FilesLocation = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "Translations");
+```
+
+Strings from disk-based translations override the strings with the same keys from resource-based translations so that a built-in translation can easily be corrected or updated by placing an updated translation file to the necessary directory instead.
+
+#### Enumeration of translation files and CultureInfos
+To obtain the list of translations (default file not included), use the *FileTranslationProvider.ListTranslationFiles* method. 
+It can load files from resources (if the *assembly* parameter is specified) or from the disk. 
+
+To obtain the list of CultureInfo from the list of files, use the *FileTranslationProvider.ListCultures* method. 
 
 ### XAML Usage
 

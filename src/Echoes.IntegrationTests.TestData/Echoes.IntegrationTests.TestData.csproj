@@ -15,9 +15,30 @@
   <ItemGroup>
     <EmbeddedResource Include="TestTranslations\*.toml" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="TestTranslations\Strings_sk.toml" />
+  </ItemGroup>
   
   <ItemGroup>
-  <AdditionalFiles Include="TestTranslations\Strings.toml" />
+  <AdditionalFiles Include="TestTranslations\Strings.toml">
+    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+  </AdditionalFiles>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="TestTranslations\Strings_sk.toml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Update="TestTranslations\Strings_de-AT.toml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Update="TestTranslations\Strings_de.toml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <PropertyGroup>
