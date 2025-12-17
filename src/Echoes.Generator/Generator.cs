@@ -141,7 +141,10 @@ public class Generator : IIncrementalGenerator
         // Generate entries for this group
         foreach (var entry in group.Entries.Values.OrderBy(e => e.Key))
         {
-            sb.AppendLine($"{indent}public static TranslationUnit {entry.Key} => new TranslationUnit(_assembly, _file, \"{entry.FullPath}\");");
+            sb.AppendLine(
+                $"{indent}private static readonly Lazy<TranslationUnit> _{entry.Key} = new Lazy<TranslationUnit>(() => new TranslationUnit(_assembly, _file, \"{entry.FullPath}\"));");
+            sb.AppendLine(
+                $"{indent}public static TranslationUnit {entry.Key} => _{entry.Key}.Value;");
         }
 
         // Generate nested classes (sorted for consistent output)
