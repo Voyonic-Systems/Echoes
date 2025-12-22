@@ -2,7 +2,7 @@
   <img src="/img/icon.webp" width="100"/>
   <h1 align="center">Echoes</h1>
   <p align="center">
-    Simple type safe translations for .NET
+    Simple type safe translations for Avalonia and .NET.
   </p>
 </p>
 
@@ -140,6 +140,15 @@ When the culture is changed at runtime, all bound `Translate` values automatical
 
 ### Is this library stable?
 No, it's currently in preview. See the version number.
+
+### Will there be support for other frameworks (WPF, MAUI, etc.)?
+No, the focus is on Avalonia. However, the core library is framework-agnostic and can be used in any .NET project. So 
+you can build your own helpers for other frameworks if needed. We'll just not include them in this repository because
+we want to keep the scope limited.
+
+### Will you add more features?
+No, the library is intentionally kept simple. Unless we find a missing essential feature, we won't add more features. 
+We might even remove some features if they complicate the library too much.
 
 ### Why is it named "Echoes"?
 The library is named after the Pink Floyd song [Echoes](https://en.wikipedia.org/wiki/Echoes_(Pink_Floyd_song)).
