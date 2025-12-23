@@ -24,4 +24,8 @@ jobs:
       run: dotnet build src/Echoes.sln -c Release
       
     - name: Publish Packages (if this version was not published before)
-      run: dotnet nuget push src/**/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+      run: |
+        # Only publish these whitelisted packages
+        dotnet nuget push src/Echoes/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+        dotnet nuget push src/Echoes.Avalonia/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+        dotnet nuget push src/Echoes.Generator/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }} --skip-duplicate
