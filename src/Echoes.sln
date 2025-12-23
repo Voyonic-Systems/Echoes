@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{DCBA01BE-B
 		Directory.Build.props = Directory.Build.props
 		global.json = global.json
 		..\README.md = ..\README.md
+		..\.github\workflows\main.yml = ..\.github\workflows\main.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Echoes.Avalonia", "Echoes.Avalonia\Echoes.Avalonia.csproj", "{8A1D6024-4CD5-74F5-B1F6-77E2D15589B4}"
