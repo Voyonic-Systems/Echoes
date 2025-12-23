@@ -1,5 +1,6 @@
 using Echoes.Common;
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Globalization;
 using System.IO;
@@ -22,7 +23,7 @@ public class FileTranslationProvider
         _assembly = assembly;
 
         _invariantTranslations =
-            ReadResource(assembly, embeddedResourceKey)
+            ReadResource(assembly, embeddedResourceKey)?.ToImmutableDictionary()
             ?? throw new Exception("Embedded resource could not be found. ");
 
         _translations = null;
@@ -45,7 +46,7 @@ public class FileTranslationProvider
             if (!string.IsNullOrEmpty(culture.Name))
             {
                 var specificFileName = $"{fileName}_{culture.Name}.toml";
-                specificResource = ReadResource(_assembly, specificFileName);
+                specificResource = ReadResource(_assembly, specificFileName)?.ToImmutableDictionary();
             }
 
             // Try to load the language-only culture file (e.g., de)
@@ -54,7 +55,7 @@ public class FileTranslationProvider
                 culture.TwoLetterISOLanguageName != culture.Name) // Only if different from specific
             {
                 var languageFileName = $"{fileName}_{culture.TwoLetterISOLanguageName}.toml";
-                languageResource = ReadResource(_assembly, languageFileName);
+                languageResource = ReadResource(_assembly, languageFileName)?.ToImmutableDictionary();
             }
 
             // Store both lookups
@@ -88,7 +89,7 @@ public class FileTranslationProvider
         return "TRANSLATION NOT FOUND: " + key;
     }
 
-    private static ImmutableDictionary<string, string>? ReadResource(Assembly assembly, string file)
+    private static IReadOnlyDictionary<string, string>? ReadResource(Assembly assembly, string file)
     {
         var resourceNames = assembly.GetManifestResourceNames();
         var resourcePath =

@@ -10,12 +10,40 @@
         <PackageId>Echoes</PackageId>
     </PropertyGroup>
 
+    <!-- Shared across all Nuget Packages-->
+    <PropertyGroup>
+        <Version>$(EchoesVersion)</Version>
+        <PackageVersion>$(EchoesVersion)</PackageVersion>
+        <Authors>Voyonic Systems GmbH</Authors>
+        <PackageIcon>icon.png</PackageIcon>
+        <Description>Simple type safe translations for .NET</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/Voyonic-Systems/Echoes</PackageProjectUrl>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>
+            $(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb
+        </AllowedOutputExtensionsInPackageBuildOutputFolder>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\img\icon.png" Pack="true" PackagePath="" />
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+    
     <ItemGroup>
       <PackageReference Include="System.Reactive" Version="6.0.1" />
     </ItemGroup>
-
+    
     <ItemGroup>
-      <ProjectReference Include="..\Echoes.Base\Echoes.Base.csproj" />
+      <Compile Include="..\_deps\TomlTranslationParser.cs">
+        <Link>deps\TomlTranslationParser.cs</Link>
+      </Compile>
+      <Compile Include="..\_deps\Tommy.cs">
+        <Link>deps\Tommy.cs</Link>
+      </Compile>
     </ItemGroup>
 
 </Project>

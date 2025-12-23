@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using Tommy;
 
 namespace Echoes.Common;
 
-public static class TomlTranslationParser
+internal static class TomlTranslationParser
 {
     // Configuration constants
     public const string ConfigSectionName = "echoes_config";
@@ -66,18 +65,18 @@ public static class TomlTranslationParser
     /// <summary>
     /// Parses all translation entries from TOML content into a flat dictionary with dotted keys
     /// </summary>
-    public static ImmutableDictionary<string, string> ParseTranslations(string tomlContent)
+    public static IReadOnlyDictionary<string, string> ParseTranslations(string tomlContent)
     {
-        var builder = ImmutableDictionary.CreateBuilder<string, string>();
+        var dict = new Dictionary<string, string>();
 
         ProcessTomlRoot
         (
             tomlContent,
-            (path, value) => builder.Add(path, value),
+            (path, value) => dict.Add(path, value),
             null
         );
 
-        return builder.ToImmutable();
+        return dict;
     }
 
     /// <summary>

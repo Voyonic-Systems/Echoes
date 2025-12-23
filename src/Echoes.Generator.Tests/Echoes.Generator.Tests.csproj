@@ -3,9 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
-
         <IsPackable>false</IsPackable>
-
         <RootNamespace>Echoes.Generator.Tests</RootNamespace>
     </PropertyGroup>
 
@@ -23,6 +21,15 @@
     <ItemGroup>
         <ProjectReference Include="..\Echoes.Generator\Echoes.Generator.csproj" />
         <ProjectReference Include="..\Echoes\Echoes.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="..\_deps\TomlTranslationParser.cs">
+        <Link>deps\TomlTranslationParser.cs</Link>
+      </Compile>
+      <Compile Include="..\_deps\Tommy.cs">
+        <Link>deps\Tommy.cs</Link>
+      </Compile>
     </ItemGroup>
 
 </Project>

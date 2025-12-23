@@ -39,7 +39,7 @@ namespace Tommy
 {
     #region TOML Nodes
 
-    public abstract class TomlNode : IEnumerable
+    internal abstract class TomlNode : IEnumerable
     {
         public virtual bool HasValue { get; } = false;
         public virtual bool IsArray { get; } = false;
@@ -165,7 +165,7 @@ namespace Tommy
         #endregion
     }
 
-    public class TomlString : TomlNode
+    internal class TomlString : TomlNode
     {
         public override bool HasValue { get; } = true;
         public override bool IsString { get; } = true;
@@ -194,7 +194,7 @@ namespace Tommy
         }
     }
 
-    public class TomlInteger : TomlNode
+    internal class TomlInteger : TomlNode
     {
         public enum Base
         {
@@ -218,7 +218,7 @@ namespace Tommy
                 : Value.ToString(CultureInfo.InvariantCulture);
     }
 
-    public class TomlFloat : TomlNode, IFormattable
+    internal class TomlFloat : TomlNode, IFormattable
     {
         public override bool IsFloat { get; } = true;
         public override bool HasValue { get; } = true;
@@ -241,7 +241,7 @@ namespace Tommy
             };
     }
 
-    public class TomlBoolean : TomlNode
+    internal class TomlBoolean : TomlNode
     {
         public override bool IsBoolean { get; } = true;
         public override bool HasValue { get; } = true;
@@ -253,7 +253,7 @@ namespace Tommy
         public override string ToInlineToml() => Value ? TomlSyntax.TRUE_VALUE : TomlSyntax.FALSE_VALUE;
     }
 
-    public class TomlDateTime : TomlNode, IFormattable
+    internal class TomlDateTime : TomlNode, IFormattable
     {
         public int SecondsPrecision { get; set; }
         public override bool HasValue { get; } = true;
@@ -266,7 +266,7 @@ namespace Tommy
                                                 .Replace(TomlSyntax.ISO861ZeroZone, TomlSyntax.RFC3339ZeroZone);
     }
 
-    public class TomlDateTimeOffset : TomlDateTime
+    internal class TomlDateTimeOffset : TomlDateTime
     {
         public override bool IsDateTimeOffset { get; } = true;
         public DateTimeOffset Value { get; set; }
@@ -280,7 +280,7 @@ namespace Tommy
         protected override string ToInlineTomlInternal() => Value.ToString(TomlSyntax.RFC3339Formats[SecondsPrecision]);
     }
 
-    public class TomlDateTimeLocal : TomlDateTime
+    internal class TomlDateTimeLocal : TomlDateTime
     {
         public enum DateTimeStyle
         {
@@ -309,7 +309,7 @@ namespace Tommy
             };
     }
 
-    public class TomlArray : TomlNode
+    internal class TomlArray : TomlNode
     {
         private List<TomlNode> values;
 
@@ -423,7 +423,7 @@ namespace Tommy
         }
     }
 
-    public class TomlTable : TomlNode
+    internal class TomlTable : TomlNode
     {
         private Dictionary<string, TomlNode> children;
         internal bool isImplicit;
@@ -625,7 +625,7 @@ namespace Tommy
 
     #region Parser
 
-    public class TOMLParser : IDisposable
+    internal class TOMLParser : IDisposable
     {
         public enum ParseState
         {
@@ -1767,7 +1767,7 @@ namespace Tommy
 
     #endregion
 
-    public static class TOML
+    internal static class TOML
     {
         public static bool ForceASCII { get; set; } = false;
 
@@ -1780,12 +1780,12 @@ namespace Tommy
 
     #region Exception Types
 
-    public class TomlFormatException : Exception
+    internal class TomlFormatException : Exception
     {
         public TomlFormatException(string message) : base(message) { }
     }
 
-    public class TomlParseException : Exception
+    internal class TomlParseException : Exception
     {
         public TomlParseException(TomlTable parsed, IEnumerable<TomlSyntaxException> exceptions) :
             base("TOML file contains format errors")
@@ -1799,7 +1799,7 @@ namespace Tommy
         public IEnumerable<TomlSyntaxException> SyntaxErrors { get; }
     }
 
-    public class TomlSyntaxException : Exception
+    internal class TomlSyntaxException : Exception
     {
         public TomlSyntaxException(string message, TOMLParser.ParseState state, int line, int col) : base(message)
         {

@@ -2,32 +2,46 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>10</LangVersion>
         <IsPackable>true</IsPackable>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
 
+        <!-- generator specific -->
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <IsRoslynComponent>true</IsRoslynComponent>
         <RootNamespace>Echoes.Generator</RootNamespace>
+        <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Do not include the generator as a lib dependency -->
 
         <!-- nuget package info -->
-        <Version>$(EchoesVersion)</Version>
-        <PackageVersion>$(EchoesVersion)</PackageVersion>
-        <PackageIcon>icon.png</PackageIcon>
-        <Authors>Voyonic Systems GmbH</Authors>
         <Product>Echoes.Generator</Product>
         <Title>Echoes.Generator</Title>
         <PackageId>Echoes.Generator</PackageId>
-        <Description>Simple type safe translations for Avalonia</Description>
+    </PropertyGroup>
+
+    <!-- Shared across all Nuget Packages-->
+    <PropertyGroup>
+        <Version>$(EchoesVersion)</Version>
+        <PackageVersion>$(EchoesVersion)</PackageVersion>
+        <Authors>Voyonic Systems GmbH</Authors>
+        <PackageIcon>icon.png</PackageIcon>
+        <Description>Simple type safe translations for .NET</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/Voyonic-Systems/Echoes</PackageProjectUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>
+            $(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb
+        </AllowedOutputExtensionsInPackageBuildOutputFolder>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Do not include the generator as a lib dependency -->
     </PropertyGroup>
-  
+
+    <ItemGroup>
+        <None Include="..\..\img\icon.png" Pack="true" PackagePath="" />
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+    
     <ItemGroup>
         <!-- Package the generator in the analyzer directory of the nuget package -->
         <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
@@ -42,7 +56,12 @@
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.0" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\Echoes.Base\Echoes.Base.csproj" OutputItemType="Analyzer"/>
+      <Compile Include="..\_deps\TomlTranslationParser.cs">
+        <Link>deps\TomlTranslationParser.cs</Link>
+      </Compile>
+      <Compile Include="..\_deps\Tommy.cs">
+        <Link>deps\Tommy.cs</Link>
+      </Compile>
     </ItemGroup>
 
 
