@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
 using Xunit;
 using Echoes;
@@ -94,7 +95,23 @@ namespace Echoes.IntegrationTests
             var unit = TestTranslations.TestStrings.dialog.ok;
 
             Assert.Equal("dialog.ok", unit.Key);
-            Assert.Equal(@"TestTranslations\Strings.toml", unit.SourceFile);
+            Assert.Equal($"TestTranslations{Path.DirectorySeparatorChar}Strings.toml", unit.SourceFile);
+        }
+
+        // Embedded resource names are stored with dots as separators regardless of build OS
+        // (e.g. "Echoes.IntegrationTests.TestData.TestTranslations.Strings.toml").
+        // FileTranslationProvider.ReadResource normalizes both '/' and '\' to '.' before
+        // searching, so a path generated on Windows and later run on Linux (or vice versa)
+        // will always resolve to the same resource
+        [Theory]
+        [InlineData("TestTranslations/Strings.toml")]   // path as generated on Linux/macOS
+        [InlineData(@"TestTranslations\Strings.toml")]  // path as generated on Windows
+        public void FileTranslationProvider_Resolves_Embedded_Resource_Regardless_Of_Path_Separator(string path)
+        {
+            var assembly = typeof(TestTranslations.TestStrings).Assembly;
+            var provider = new FileTranslationProvider(assembly, path);
+
+            Assert.Equal("OK", provider.ReadTranslation("dialog.ok", new CultureInfo("en")));
         }
 
         [Fact]
