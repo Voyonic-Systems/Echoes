@@ -3,6 +3,8 @@ name: Build, Test and Publish release
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
@@ -22,8 +24,12 @@ jobs:
       
     - name: Build for release
       run: dotnet build src/Echoes.sln -c Release
+
+    - name: Run tests
+      run: dotnet test src/Echoes.sln -c Release --no-build
       
     - name: Publish Packages (if this version was not published before)
+      if: github.event_name == 'push'
       run: |
         # Only publish these whitelisted packages
         dotnet nuget push src/Echoes/bin/Release/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }} --skip-duplicate
