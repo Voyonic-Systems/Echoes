@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <!-- Emit generated files so build failures from the generator are visible -->
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+  </PropertyGroup>
+
+  <!--
+    Intentionally using NuGet package references rather than project references.
+    Source generators behave differently when consumed as a NuGet package (they are
+    loaded as analyzer assemblies) versus project references (loaded directly).
+    This project exists purely to catch regressions that only appear with the
+    packaged generator.
+  -->
+  <ItemGroup>
+    <PackageReference Include="Echoes" Version="$(EchoesVersion)" />
+    <PackageReference Include="Echoes.Generator" Version="$(EchoesVersion)">
+      <OutputItemType>Analyzer</OutputItemType>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Translations\App.toml" />
+    <EmbeddedResource Include="Translations\*.toml" />
+  </ItemGroup>
+
+</Project>

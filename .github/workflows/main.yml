@@ -22,7 +22,10 @@ jobs:
       
     - name: Build for release
       run: dotnet build src/Echoes.sln -c Release
-      
+
+    - name: NuGet smoke test
+      run: dotnet build src/Echoes.NugetSmokeTest/Echoes.NugetSmokeTest.csproj -c Release
+
     - name: Publish Packages (if this version was not published before)
       run: |
         # Only publish these whitelisted packages
