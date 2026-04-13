@@ -56,17 +56,21 @@ namespace Echoes.Generator.Tests
             Assert.Contains("private static readonly Assembly _assembly = typeof(Strings).Assembly;", text);
 
             // Assert: root property
-            Assert.Contains("public static TranslationUnit title => new TranslationUnit(_assembly, _file, \"title\");", text);
+            Assert.Contains("private static readonly Lazy<TranslationUnit> _title = new Lazy<TranslationUnit>(() => new TranslationUnit(_assembly, _file, \"title\"));", text);
+            Assert.Contains("public static TranslationUnit title => _title.Value;", text);
 
             // Assert: nested classes for dotted/table paths
             Assert.Contains("public static class dialog", text);
-            Assert.Contains("public static TranslationUnit ok => new TranslationUnit(_assembly, _file, \"dialog.ok\");", text);
-            Assert.Contains("public static TranslationUnit cancel => new TranslationUnit(_assembly, _file, \"dialog.cancel\");", text);
+            Assert.Contains("private static readonly Lazy<TranslationUnit> _ok = new Lazy<TranslationUnit>(() => new TranslationUnit(_assembly, _file, \"dialog.ok\"));", text);
+            Assert.Contains("public static TranslationUnit ok => _ok.Value;", text);
+            Assert.Contains("private static readonly Lazy<TranslationUnit> _cancel = new Lazy<TranslationUnit>(() => new TranslationUnit(_assembly, _file, \"dialog.cancel\"));", text);
+            Assert.Contains("public static TranslationUnit cancel => _cancel.Value;", text);
 
             Assert.Contains("public static class nested", text);
             Assert.Contains("public static class level1", text);
             Assert.Contains("public static class level2", text);
-            Assert.Contains("public static TranslationUnit nestedstr1 => new TranslationUnit(_assembly, _file, \"nested.level1.level2.nestedstr1\");", text);
+            Assert.Contains("private static readonly Lazy<TranslationUnit> _nestedstr1 = new Lazy<TranslationUnit>(() => new TranslationUnit(_assembly, _file, \"nested.level1.level2.nestedstr1\"));", text);
+            Assert.Contains("public static TranslationUnit nestedstr1 => _nestedstr1.Value;", text);
         }
 
         [Fact]
@@ -94,15 +98,19 @@ namespace Echoes.Generator.Tests
             Assert.Contains("private static readonly Assembly _assembly = typeof(Strings).Assembly;", text);
 
             // Root + nested members
-            Assert.Contains("public static TranslationUnit title => new TranslationUnit(_assembly, _file, \"title\");", text);
+            Assert.Contains("private static readonly Lazy<TranslationUnit> _title = new Lazy<TranslationUnit>(() => new TranslationUnit(_assembly, _file, \"title\"));", text);
+            Assert.Contains("public static TranslationUnit title => _title.Value;", text);
             Assert.Contains("public static class dialog", text);
-            Assert.Contains("public static TranslationUnit ok => new TranslationUnit(_assembly, _file, \"dialog.ok\");", text);
-            Assert.Contains("public static TranslationUnit cancel => new TranslationUnit(_assembly, _file, \"dialog.cancel\");", text);
+            Assert.Contains("private static readonly Lazy<TranslationUnit> _ok = new Lazy<TranslationUnit>(() => new TranslationUnit(_assembly, _file, \"dialog.ok\"));", text);
+            Assert.Contains("public static TranslationUnit ok => _ok.Value;", text);
+            Assert.Contains("private static readonly Lazy<TranslationUnit> _cancel = new Lazy<TranslationUnit>(() => new TranslationUnit(_assembly, _file, \"dialog.cancel\"));", text);
+            Assert.Contains("public static TranslationUnit cancel => _cancel.Value;", text);
 
             Assert.Contains("public static class nested", text);
             Assert.Contains("public static class level1", text);
             Assert.Contains("public static class level2", text);
-            Assert.Contains("public static TranslationUnit nestedstr1 => new TranslationUnit(_assembly, _file, \"nested.level1.level2.nestedstr1\");", text);
+            Assert.Contains("private static readonly Lazy<TranslationUnit> _nestedstr1 = new Lazy<TranslationUnit>(() => new TranslationUnit(_assembly, _file, \"nested.level1.level2.nestedstr1\"));", text);
+            Assert.Contains("public static TranslationUnit nestedstr1 => _nestedstr1.Value;", text);
 
             // Does NOT contain entries only in the de file
             Assert.DoesNotContain("additional_not_in_invariant", text);
