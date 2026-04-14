@@ -150,5 +150,8 @@ we want to keep the scope limited.
 No, the library is intentionally kept simple. Unless we find a missing essential feature, we won't add more features. 
 We might even remove some features if they complicate the library too much.
 
+### How to contribute?
+Please create an issue with your suggestion before actually doing any work. The library is intended to be small - so new features will most likely be rejected.
+
 ### Why is it named "Echoes"?
 The library is named after the Pink Floyd song [Echoes](https://en.wikipedia.org/wiki/Echoes_(Pink_Floyd_song)).
