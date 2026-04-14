@@ -15,6 +15,6 @@ dotnet build src/Echoes.sln -c Release
 dotnet build src/Echoes.NugetSmokeTest/Echoes.NugetSmokeTest.csproj -c Release
 ```
 
-The `nuget.config` includes both `bin/Debug` and `bin/Release` local feeds so the smoke test works regardless of which configuration was used to build the solution.
+The `nuget.config` points to the `bin/Release` output directories, so the solution must be built with `-c Release` first.
 
 In CI this maps naturally to two sequential steps.
