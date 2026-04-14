@@ -27,6 +27,9 @@ jobs:
 
     - name: Run tests
       run: dotnet test src/Echoes.sln -c Release --no-build
+
+    - name: NuGet smoke test
+      run: dotnet build src/Echoes.NugetSmokeTest/Echoes.NugetSmokeTest.csproj -c Release
       
     - name: Publish Packages (if this version was not published before)
       if: github.event_name == 'push'

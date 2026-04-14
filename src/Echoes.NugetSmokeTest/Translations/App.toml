@@ -1,0 +1,6 @@
+[echoes_config]
+generated_namespace = "Echoes.NugetSmokeTest"
+generated_class_name = "AppStrings"
+
+[translations]
+greeting = "Hello from the NuGet smoke test"
