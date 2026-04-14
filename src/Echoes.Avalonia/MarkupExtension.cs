@@ -1,8 +1,6 @@
 using System;
 using Avalonia;
-using Avalonia.Data;
 using Avalonia.Markup.Xaml;
-using Avalonia.Markup.Xaml.MarkupExtensions;
 
 namespace Echoes;
 
