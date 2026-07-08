@@ -6,15 +6,17 @@ namespace Echoes;
 
 public sealed class Translate : MarkupExtension
 {
-     private readonly TranslationUnit _unit;
+    public required TranslationUnit Unit { get; init; }
+
+    public Translate() { }
 
     public Translate(TranslationUnit unit)
     {
-        _unit = unit;
+        Unit = unit;
     }
 
     public override object ProvideValue(IServiceProvider serviceProvider)
     {
-        return _unit.Value.ToBinding();
+        return Unit.Value.ToBinding();
     }
 }
