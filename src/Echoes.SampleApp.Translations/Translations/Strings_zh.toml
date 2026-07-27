@@ -1,6 +1,7 @@
 app_title = "Echoes 示例应用程序"
 welcome = "欢迎使用 Echoes！"
 greeting = "你好！本示例展示了嵌套翻译与区域设置回退机制。"
+cur_culture = "当前文化："
 
 austrian_specific = "此文本有奥地利、德语和英语版本"
 german_general = "此文本有德语翻译，但没有奥地利变体"

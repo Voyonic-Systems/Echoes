@@ -6,6 +6,7 @@ generated_namespace = "Echoes.SampleApp.Translations"
 app_title = "Echoes Sample App"
 welcome = "Welcome to Echoes!"
 greeting = "Hello! This demo shows nested translations and locale fallback."
+cur_culture = "Current Culture: "
 
 # For fallback demonstration
 invariant_only = "This text only exists in English"
