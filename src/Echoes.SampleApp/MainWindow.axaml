@@ -37,15 +37,20 @@
               CommandParameter="zh"
               Content="zh"/>
     </UniformGrid>
-    <TextBlock Text="{Binding CurrentCulture, StringFormat='Current Culture: {0}'}"
-               DockPanel.Dock="Bottom"
-               FontStyle="Italic"/>
-    
+    <TextBlock DockPanel.Dock="Bottom" FontStyle="Italic">
+        <TextBlock.Text>
+            <MultiBinding StringFormat="{}{0}{1}">
+                <echoes:Translate Unit="{x:Static translations:Strings.cur_culture}" />
+                <Binding Path="CurrentCulture" />
+            </MultiBinding>
+        </TextBlock.Text>
+    </TextBlock>
+
     <StackPanel>
       <TextBlock Text="{echoes:Translate {x:Static translations:Strings.welcome}}"
                    FontSize="20"
                    FontWeight="Bold"/>
-      
+
       <TextBlock Text="{echoes:Translate {x:Static translations:Strings.greeting}}"
                  FontSize="16"/>
 

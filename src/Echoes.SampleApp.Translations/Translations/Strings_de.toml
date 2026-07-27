@@ -1,6 +1,7 @@
 app_title = "Echoes Beispiel-App"
 welcome = "Willkommen bei Echoes!"
 greeting = "Hallo! Diese Demo zeigt verschachtelte Übersetzungen und Locale-Fallback."
+cur_culture = "aktuelle Kultur: "
 
 # Only in German, not in Austrian
 german_general = "Dieser Text hat eine deutsche Übersetzung, aber keine österreichische Variante"
